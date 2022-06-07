@@ -1,0 +1,160 @@
+$theme-lilac: #7772b2;
+$theme-yellow: #F4DA95;
+$theme-teal: #709FA7;
+$theme-peach: #E47B68;
+$theme-black: #1B1B1B;
+$theme-shadow: #CDCDCD;
+$theme-text: rgba(255, 255, 255, 0.7);
+$border-radius: 10px;
+$border-width: 2px;
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;500;700;900&display=swap');
+$theme-font: 'Rubik',
+sans-serif;
+* {
+    box-sizing: border-box;
+    font-family: $theme-font;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.yellow {
+    background-color: $theme-yellow;
+}
+
+.lilac {
+    background-color: $theme-lilac;
+}
+
+.peach {
+    background-color: $theme-peach;
+}
+
+.teal {
+    background-color: $theme-teal;
+}
+
+.bubble {
+    border-radius: 50%;
+    position: fixed;
+    opacity: 0.5;
+    &.yellow {
+        bottom: -20px;
+        left: -170px;
+        height: 300px;
+        width: 300px;
+    }
+    &.teal {
+        bottom: -50px;
+        left: 50px;
+        height: 100px;
+        width: 100px;
+    }
+    &.peach {
+        height: 70px;
+        width: 70px;
+        bottom: -5px;
+        right: 150px;
+    }
+    &.lilac {
+        height: 300px;
+        width: 300px;
+        right: -250px;
+        bottom: -100px;
+    }
+}
+
+.content-wrapper {
+    width: 305px;
+    height: 555px;
+    padding: 10px;
+    padding: 10px;
+    border: $border-width solid $theme-lilac;
+    border-radius: $border-radius;
+    box-shadow: 70px 70px 70px $theme-shadow;
+    .inner-wrapper {
+        width: 280px;
+        height: 530px;
+        border-radius: $border-radius;
+        color: $theme-black;
+        position: relative;
+        box-shadow: 3px 3px 3px $theme-shadow, -3px -3px 3px $theme-shadow;
+        .about {
+            padding: 70px 0px 0px 40px;
+            .greet {
+                font-weight: 500;
+                font-size: 20px;
+                margin-bottom: 15px;
+            }
+            .ask-mood {
+                font-weight: 300;
+                font-size: 14px;
+            }
+        }
+        .swiper-button-prev:after,
+        .swiper-button-next:after {
+            font-size: 30px;
+            color: $theme-text
+        }
+        .swiper-parent {
+            .swiper-container {
+                border-radius: $border-radius;
+                height: 400px;
+                &.big {
+                    height: 530px;
+                }
+                .swiper-wrapper {
+                    align-items: center;
+                    .swiper-slide {
+                        width: 175px;
+                        height: 200px;
+                        text-align: center;
+                        color: $theme-text;
+                        .mood {
+                            transition: all 0.1s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+                            width: 175px;
+                            height: 175px;
+                            font-size: 24px;
+                            font-weight: 700;
+                            letter-spacing: 2px;
+                            padding-top: 65px;
+                            border-radius: $border-radius;
+                            position: relative;
+                            .icon {
+                                position: absolute;
+                                top: 10px;
+                                right: 30px;
+                            }
+                        }
+                        &.grow {
+                            width: 275px;
+                            height: 530px;
+                            transform: scaleY(1);
+                            transition: all 0.1s linear;
+                            .mood {
+                                &.large {
+                                    width: 295px;
+                                    max-width: 295px;
+                                    height: 535px;
+                                    padding-top: 235px;
+                                    transition: all 0.1s linear;
+                                    font-size: 30px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+  .bubble {
+display: none;
+  }
+}

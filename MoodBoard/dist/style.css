@@ -1,0 +1,145 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;500;700;900&display=swap");
+* {
+  box-sizing: border-box;
+  font-family: "Rubik", sans-serif;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.yellow {
+  background-color: #F4DA95;
+}
+
+.lilac {
+  background-color: #7772b2;
+}
+
+.peach {
+  background-color: #E47B68;
+}
+
+.teal {
+  background-color: #709FA7;
+}
+
+.bubble {
+  border-radius: 50%;
+  position: fixed;
+  opacity: 0.5;
+}
+.bubble.yellow {
+  bottom: -20px;
+  left: -170px;
+  height: 300px;
+  width: 300px;
+}
+.bubble.teal {
+  bottom: -50px;
+  left: 50px;
+  height: 100px;
+  width: 100px;
+}
+.bubble.peach {
+  height: 70px;
+  width: 70px;
+  bottom: -5px;
+  right: 150px;
+}
+.bubble.lilac {
+  height: 300px;
+  width: 300px;
+  right: -250px;
+  bottom: -100px;
+}
+
+.content-wrapper {
+  width: 305px;
+  height: 555px;
+  padding: 10px;
+  padding: 10px;
+  border: 2px solid #7772b2;
+  border-radius: 10px;
+  box-shadow: 70px 70px 70px #CDCDCD;
+}
+.content-wrapper .inner-wrapper {
+  width: 280px;
+  height: 530px;
+  border-radius: 10px;
+  color: #1B1B1B;
+  position: relative;
+  box-shadow: 3px 3px 3px #CDCDCD, -3px -3px 3px #CDCDCD;
+}
+.content-wrapper .inner-wrapper .about {
+  padding: 70px 0px 0px 40px;
+}
+.content-wrapper .inner-wrapper .about .greet {
+  font-weight: 500;
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+.content-wrapper .inner-wrapper .about .ask-mood {
+  font-weight: 300;
+  font-size: 14px;
+}
+.content-wrapper .inner-wrapper .swiper-button-prev:after,
+.content-wrapper .inner-wrapper .swiper-button-next:after {
+  font-size: 30px;
+  color: rgba(255, 255, 255, 0.7);
+}
+.content-wrapper .inner-wrapper .swiper-parent .swiper-container {
+  border-radius: 10px;
+  height: 400px;
+}
+.content-wrapper .inner-wrapper .swiper-parent .swiper-container.big {
+  height: 530px;
+}
+.content-wrapper .inner-wrapper .swiper-parent .swiper-container .swiper-wrapper {
+  align-items: center;
+}
+.content-wrapper .inner-wrapper .swiper-parent .swiper-container .swiper-wrapper .swiper-slide {
+  width: 175px;
+  height: 200px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+}
+.content-wrapper .inner-wrapper .swiper-parent .swiper-container .swiper-wrapper .swiper-slide .mood {
+  transition: all 0.1s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+  width: 175px;
+  height: 175px;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding-top: 65px;
+  border-radius: 10px;
+  position: relative;
+}
+.content-wrapper .inner-wrapper .swiper-parent .swiper-container .swiper-wrapper .swiper-slide .mood .icon {
+  position: absolute;
+  top: 10px;
+  right: 30px;
+}
+.content-wrapper .inner-wrapper .swiper-parent .swiper-container .swiper-wrapper .swiper-slide.grow {
+  width: 275px;
+  height: 530px;
+  transform: scaleY(1);
+  transition: all 0.1s linear;
+}
+.content-wrapper .inner-wrapper .swiper-parent .swiper-container .swiper-wrapper .swiper-slide.grow .mood.large {
+  width: 295px;
+  max-width: 295px;
+  height: 535px;
+  padding-top: 235px;
+  transition: all 0.1s linear;
+  font-size: 30px;
+}
+
+@media screen and (max-width: 768px) {
+  .bubble {
+    display: none;
+  }
+}

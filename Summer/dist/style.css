@@ -1,0 +1,125 @@
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #f4efe0;
+}
+
+#zoom {
+  transform-origin: center;
+  animation: vanish 4s infinite linear, zoom2 4s infinite cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+@keyframes zoom2 {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(21.25);
+  }
+}
+#background {
+  transform-origin: center;
+  animation: vanish 4s infinite linear, zoom1 4s infinite cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+#frame-face {
+  transform-origin: center;
+  animation: zoom1 4s infinite cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+#frame-face-small, #_face-clip {
+  transform-origin: center;
+  animation: zoom2 4s infinite cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+@keyframes zoom1 {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(30);
+  }
+}
+#window {
+  animation: vanish 4s infinite linear, slide 4s infinite linear;
+}
+
+@keyframes slide {
+  0%, 20% {
+    transform: translateY(0%);
+  }
+  50%, 100% {
+    transform: translateY(-10%);
+  }
+}
+@keyframes vanish {
+  0%, 40% {
+    opacity: 1;
+  }
+  55%, 100% {
+    opacity: 0;
+  }
+}
+#yacht-second {
+  animation: y2anim 4s infinite linear;
+}
+
+@keyframes y2anim {
+  0%, 50% {
+    transform: translateX(15%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+#sun-second {
+  animation: sun2anim 4s infinite ease-out;
+}
+
+@keyframes sun2anim {
+  56% {
+    transform: translate(-10%, 5%);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+#beach-second {
+  animation: beach2anim 4s infinite cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+@keyframes beach2anim {
+  0%, 45% {
+    transform: translateY(20%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+#house-second {
+  transform-origin: center;
+  animation: house2anim 4s infinite cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+@keyframes house2anim {
+  0%, 50% {
+    transform: translateY(30%) scale(0.4);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+#tree-shadow-second {
+  transform-origin: center;
+  animation: tree2anim 4s infinite cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+@keyframes tree2anim {
+  0%, 55% {
+    transform: translateY(30%) scale(0.2);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}

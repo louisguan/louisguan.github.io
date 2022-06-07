@@ -1,0 +1,84 @@
+@mixin animation($name){
+    @-webkit-keyframes #{$name}{
+        @content;
+    }
+    @-moz-keyframes #{$name}{
+        @content;
+    }
+    @-o-keyframes #{$name}{
+        @content;
+    }
+    @keyframes #{$name}{
+        @content;
+    }
+}
+
+@include animation(spin) {
+ 0%, 100%{
+    -ms-transform: rotate(-0deg); 
+    -webkit-transform: rotate(-0deg);
+    transform: rotate(-0deg); 
+  }
+ 50%{
+    -ms-transform: rotate(360deg); 
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg); 
+    margin-left: 30%;
+    top: 35%;
+    border-radius: 50%;
+    border: 80px solid transparent;
+  }
+  51%{
+    border: 20px solid transparent;
+  }
+}
+
+$step: 12px;
+$count: 40;
+$time: 12s;
+/* change delay for different effects */
+$delay: .3s;
+/*========================*/
+html{
+    pointer: none;
+  }
+body{
+  background: #222;
+  overflow: hidden;
+  
+  .cover{
+     position: absolute;
+     left: 0%;
+     width: 100%;
+     height: $count*$step/2 + 10;
+     z-index: 1;
+   }
+  
+  .circle{
+     position: absolute;
+     left: 0%;
+     top: 0%;
+     border: 0px solid transparent;
+     border-radius: 5%;
+     z-index: 0;
+     opacity: 0.7;
+    
+    @for $i from 1 through $count{
+      &:nth-child(#{$i}){
+         border-color:  hsl($i*20deg, 80%, 50%) hsl($i*20deg, 80%, 50%) hsl($i*20deg, 80%, 50%);
+         width: $i*$step;
+         height: $i*$step;
+         margin-left: - $i*$step/1.1;
+         margin-top: - $i*$step/6;   
+        -webkit-animation: spin $time infinite;
+        -moz-animation: spin $time infinite;
+        -o-animation: spin $time infinite;
+         animation: spin $time infinite; 
+        -webkit-animation-delay: -$i/2*$delay; 
+         animation-delay: -$i/2*$delay;  
+        -webkit-animation-timing-function: cubic-bezier(0.4,0,0.6,1);
+         animation-timing-function: cubic-bezier(0.4,0,0.6,1);
+      }
+    }
+  }
+}
