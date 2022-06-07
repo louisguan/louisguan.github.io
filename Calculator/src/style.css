@@ -1,0 +1,366 @@
+/* ### LOGIC ################ */
+.number9 + * { --digit: 0; }
+.number0:checked + * + * + * + * + * + * + * + * + * + * { --digit: 0; }
+.number1:checked + * + * + * + * + * + * + * + * + * { --digit: 1; }
+.number2:checked + * + * + * + * + * + * + * + * { --digit: 2; }
+.number3:checked + * + * + * + * + * + * + * { --digit: 3; }
+.number4:checked + * + * + * + * + * + * { --digit: 4; }
+.number5:checked + * + * + * + * + * { --digit: 5; }
+.number6:checked + * + * + * + * { --digit: 6; }
+.number7:checked + * + * + * { --digit: 7; }
+.number8:checked + * + * { --digit: 8; }
+.number9:checked + * { --digit: 9; }
+
+#digit1 > :checked ~ :last-child { --digit-1: var(--digit); --value-1: var(--digit); }
+#digit2 > :checked ~ :last-child { --digit-2: var(--digit); --value-1: calc(var(--digit-1) * 10 + var(--digit-2)); }
+#digit3 > :checked ~ :last-child { --digit-3: var(--digit); --value-1: calc(var(--digit-1) * 100 + var(--digit-2) * 10 + var(--digit-3)); }
+#digit4 > :checked ~ :last-child { --digit-4: var(--digit); --value-1: calc(var(--digit-1) * 1000 + var(--digit-2) * 100 + var(--digit-3) * 10 + var(--digit-4)); }
+#digit5 > :checked ~ :last-child { --digit-5: var(--digit); --value-2: var(--digit-5); }
+#digit6 > :checked ~ :last-child { --digit-6: var(--digit); --value-2: calc(var(--digit-5) * 10 + var(--digit-6)); }
+#digit7 > :checked ~ :last-child { --digit-7: var(--digit); --value-2: calc(var(--digit-5) * 100 + var(--digit-6) * 10 + var(--digit-7)); }
+#digit8 > :checked ~ :last-child { --digit-8: var(--digit); --value-2: calc(var(--digit-5) * 1000 + var(--digit-6) * 100 + var(--digit-7) * 10 + var(--digit-8)); }
+
+#add:checked      ~ #equals:checked ~ main { --out: calc(var(--value-1) + var(--value-2)); }
+#subtract:checked ~ #equals:checked ~ main { --out: calc(var(--value-1) - var(--value-2)); }
+#multiply:checked ~ #equals:checked ~ main { --out: calc(var(--value-1) * var(--value-2)); }
+#divide:checked   ~ #equals:checked ~ main { --out: calc(var(--value-1) / var(--value-2)); }
+
+main { counter-reset: value1 var(--value-1, 0) value2 var(--value-2, 0) out var(--out, 0); }
+
+/*    a
+*/
+ #input::after { content: ""; }
+#output::after { content: counter(value1); }
+
+/*    a
+      +
+*/
+#operations > :checked ~ #equals:not(:checked) ~ main #input::after { content: counter(value1); }
+
+#add:checked      ~ #equals:not(:checked) ~ main  #output::after { content: "+"; }
+#subtract:checked ~ #equals:not(:checked) ~ main  #output::after { content: "-"; }
+#multiply:checked ~ #equals:not(:checked) ~ main  #output::after { content: "\00D7"; }
+#divide:checked   ~ #equals:not(:checked) ~ main  #output::after { content: "\00f7"; }
+
+/*   a +
+       b
+*/
+#digit5 :checked ~ div #add:checked      ~ #equals:not(:checked) ~ main  #input::after { content: counter(value1) " + "; }
+#digit5 :checked ~ div #subtract:checked ~ #equals:not(:checked) ~ main  #input::after { content: counter(value1) " - "; }
+#digit5 :checked ~ div #multiply:checked ~ #equals:not(:checked) ~ main  #input::after { content: counter(value1) " \00D7  "; }
+#digit5 :checked ~ div #divide:checked   ~ #equals:not(:checked) ~ main  #input::after { content: counter(value1) " \00f7 "; }
+
+#digit5 :checked ~ div #operations > :checked ~ #equals:not(:checked) ~ main #output::after,
+#digit5 :checked ~     #operations > :checked ~ #equals:not(:checked) ~ main #output::after { content: counter(value2); }
+
+/* a + b
+       c
+*/
+#add:checked      ~ #equals:checked ~ main  #input::after { content: counter(value1) " + " counter(value2); }
+#subtract:checked ~ #equals:checked ~ main  #input::after { content: counter(value1) " - " counter(value2); }
+#multiply:checked ~ #equals:checked ~ main  #input::after { content: counter(value1) " \00D7  " counter(value2); }
+#divide:checked   ~ #equals:checked ~ main  #input::after { content: counter(value1) " \00f7  " counter(value2); }
+
+
+#equals:checked ~ main #output::after { content: counter(out); }
+
+/* dividing by 0 */
+#digit5 > .number0:checked ~ div #divide:checked ~ #equals:checked ~ main #output::after { content: "Oi"; }
+
+#digit5 > .number0:checked ~ div #divide:checked ~ #equals:checked ~ main #output::after { content: "Oi"; }
+#digit5 :not(.number0):checked ~ div #divide:checked ~ #equals:checked ~ main #output::after { content: counter(out); }
+
+button {
+	position: relative;
+	border: none;
+}
+
+label {
+	width: 100%;
+	height: 100%;
+	display: block;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+
+label.digit5,
+label.digit6,
+label.digit7,
+label.digit8 { display: none; }
+
+#operations > :checked ~ main label { display: block; }
+
+#digit1 > :checked ~ div label.digit1 { display: none; }
+#digit2 > :checked ~ div label.digit2 { display: none; }
+#digit3 > :checked ~ div label.digit3 { display: none; }
+#digit4 > :checked ~ div label.digit4 { display: none; }
+
+#digit5 > :checked ~ div label.digit5 { display: none; }
+#digit6 > :checked ~ div label.digit6 { display: none; }
+#digit7 > :checked ~ div label.digit7 { display: none; }
+#digit8 > :checked ~ div label.digit8 { display: none; }
+
+#operations > :checked ~ #equals:not(:checked) ~ main label:nth-child(n + 4) { display: none; }
+#operations > :checked ~ #equals:not(:checked) ~ main label.digit5 { display: block; }
+
+#operations > :checked ~ #equals:checked ~ main label { display: none !important; }
+
+#digit5 > :checked ~ div #operations > :checked ~ #equals:not(:checked) ~ main label.digit5 { display: none; }
+#digit5 > .number0:checked ~ div  #operations > :checked ~ #equals:not(:checked) ~ main label.digit5 { display: block; }
+#digit5 > .number0:checked ~ :checked ~ div  #operations > :checked ~ #equals:not(:checked) ~ main label.digit5 { display: none; }
+
+label[for=equals]{ display: none; }
+#digit5 > :checked ~ div #operations > :checked ~ #equals ~ main label[for=equals]{ display: block; }
+
+#operations > :checked ~ main button:nth-child(4n) label { display: none; }
+
+#digit5 > .number0:checked ~ div main button:nth-child(14) label { pointer-events: none; }
+#digit5 > .number0:checked ~ :checked ~ div main button:nth-child(14) label { pointer-events: initial; }
+
+input[type=checkbox]{
+	position: fixed;
+	right: 0;
+	top: 0;
+	display: block;
+	width: 1px;
+	height: 1px;
+	opacity: 0.01;
+	transform: scale(0.01);
+}
+
+/* ### DESIGN #######################*/
+body {
+	font: 20px / 1.5 Roboto, arial, sans-serif;
+	height: 100vh;
+	width: 100vw;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 0;
+	background-color: khaki;
+}
+
+main {
+	width: 100vw;
+	max-width: 400px;
+	height: 100vh;
+  min-height: 500px;
+	max-height: 600px;
+	display: flex;
+	flex-direction: column;
+	box-shadow: 0 4px 10px 2px rgba(0, 0, 0, 0.1),
+		0 5px 20px 5px rgba(0, 0, 0, 0.08),
+		0 2px 6px rgba(0, 0, 0, 0.1);
+	background-color: #f7f5eb;
+}
+
+#screen {
+	height: 250px;
+	text-align: right;
+	color: rgba(0, 0, 0, 0.7);
+}
+
+#input {
+	height: 50px;
+	line-height: 50px;
+	padding: 50px 36px 0;
+}
+
+#output {
+	height: 150px;
+	line-height: 100px;
+	padding: 0 36px;
+	font-size: 80px;
+}
+
+#buttons {
+	flex: 1;
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	grid-template-columns: repeat(4, 1fr);
+	background-color: #555;
+}
+
+
+button::-moz-focus-inner, input::-moz-focus-inner { border: 0; }
+
+button {
+	color: rgba(255, 255, 255, 0.7);
+	background: none;
+	font-size: 20px;
+	font-family: inherit;
+	outline: none;
+	padding: 0;
+	overflow: hidden;
+}
+
+button::after {
+	content: "";
+	background-color: rgba(255, 255, 255, 0.1);
+	opacity: 0;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+	transition: .2s;
+	pointer-events: none;
+}
+
+button:hover::after {
+	opacity: 1;
+}
+
+button::before {
+	content: "";
+	background-color: rgba(255, 255, 255, 0.1);
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	opacity: 0;
+	transform: translate(-50%, -50%) scale(0.8);
+	transition: .3s;
+	animation: .2s 0s 1 bloop;
+	pointer-events: none;
+}
+
+@keyframes bloop{
+	from { transform: translate(-50%, -50%); opacity: 1; }
+	to { transform: translate(-50%, -50%) scale(1.6); opacity: 0; }
+}
+
+button:active::before {
+	opacity: 1;
+	transform: translate(-50%, -50%);	
+	animation: none;
+}
+
+button:nth-child(4n){
+	background-color: #f4e660;
+	color: rgba(0, 0, 0, 0.6);
+}
+
+button:nth-child(4n)::after, button:nth-child(4n)::before{
+	background-color: rgba(121, 104, 6, 0.1);
+}
+
+button, button * {
+	cursor: pointer;
+}
+
+
+button:nth-child(13){
+	overflow: visible;
+}
+button:nth-child(13)::before, button:nth-child(13)::after{
+	content: none;
+}
+
+input[type=reset]{
+	background: #f4e660;
+	border: none;
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	color: rgba(0, 0, 0, 0.6);
+	font-size: inherit;
+	font-family: inherit;
+	padding: 0;
+	outline: none;
+	transition: .2s;
+}
+
+input[type=reset]:hover{ background-color: #e7d956; }
+input[type=reset]:active { background-color: #dccd4d; }
+
+button#why {
+	color: rgba(0, 0, 0, 0.3);
+	width: 40px;
+	height: 40px;
+	padding: 16px;
+	box-sizing: content-box;
+	position: fixed;
+	top: 0;
+	right: 0;
+}
+
+button#why::before, button#why::after { content: none; }
+
+section {
+  font-size: 16px;
+	width: 450px;
+	box-sizing: border-box;
+	position: fixed;
+	top: 12px;
+	right: -700px;
+	max-width: calc(100vw - 24px);
+	max-height: calc(100vh - 24px);
+	background-color: white;
+	transform-origin: 95% 5%;
+	transform: scale(0.8);
+	opacity: 0;
+	box-shadow: 0 4px 10px 2px rgba(0, 0, 0, 0.1),
+		0 5px 20px 5px rgba(0, 0, 0, 0.08),
+		0 10px 30px 10px rgba(0, 0, 0, 0.08);
+	transition: all .3s, right 0s .3s;
+	background-color: #f7f5eb;
+	padding: 2em;
+}
+
+button#why:focus + section {
+	right: 12px;
+	transform: none;
+	opacity: 1;
+	transition: all .3s, right 0s;
+}
+
+section h1 {
+	padding-left: 24px;
+	font-size: 2em;
+	margin: 0 auto 40px;
+}
+
+section p { margin: 18px 0; }
+section p:last-child { margin-bottom: 12px; }
+
+a {
+	color: rgba(0, 0, 0, 0.25);
+	width: 48px;
+	height: 48px;
+	padding: 12px;
+	position: fixed;
+	top: 0;
+	left: 0;
+}
+
+svg {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+
+
+@media screen and (max-width: 600px){
+	main {
+		max-width: none;
+		max-height: none;
+	}
+	button#why, a {
+		padding: 12px;
+		width: 36px;
+		height: 36px;
+	}
+}
+
+@media screen and (max-height: 500px){
+	section { width: 900px; }
+}

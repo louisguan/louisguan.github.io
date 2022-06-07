@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - Pure CSS Calculator</title>
+  <link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<form>
+		<div id="digit1">
+			<input type="checkbox" id="d1-1" class="number1">
+			<input type="checkbox" id="d1-2" class="number2">
+			<input type="checkbox" id="d1-3" class="number3">
+			<input type="checkbox" id="d1-4" class="number4">
+			<input type="checkbox" id="d1-5" class="number5">
+			<input type="checkbox" id="d1-6" class="number6">
+			<input type="checkbox" id="d1-7" class="number7">
+			<input type="checkbox" id="d1-8" class="number8">
+			<input type="checkbox" id="d1-9" class="number9">
+			<div id="digit2">
+				<input type="checkbox" id="d2-0" class="number0">
+				<input type="checkbox" id="d2-1" class="number1">
+				<input type="checkbox" id="d2-2" class="number2">
+				<input type="checkbox" id="d2-3" class="number3">
+				<input type="checkbox" id="d2-4" class="number4">
+				<input type="checkbox" id="d2-5" class="number5">
+				<input type="checkbox" id="d2-6" class="number6">
+				<input type="checkbox" id="d2-7" class="number7">
+				<input type="checkbox" id="d2-8" class="number8">
+				<input type="checkbox" id="d2-9" class="number9">
+				<div id="digit3">
+					<input type="checkbox" id="d3-0" class="number0">
+					<input type="checkbox" id="d3-1" class="number1">
+					<input type="checkbox" id="d3-2" class="number2">
+					<input type="checkbox" id="d3-3" class="number3">
+					<input type="checkbox" id="d3-4" class="number4">
+					<input type="checkbox" id="d3-5" class="number5">
+					<input type="checkbox" id="d3-6" class="number6">
+					<input type="checkbox" id="d3-7" class="number7">
+					<input type="checkbox" id="d3-8" class="number8">
+					<input type="checkbox" id="d3-9" class="number9">
+					<div id="digit4">
+						<input type="checkbox" id="d4-0" class="number0">
+						<input type="checkbox" id="d4-1" class="number1">
+						<input type="checkbox" id="d4-2" class="number2">
+						<input type="checkbox" id="d4-3" class="number3">
+						<input type="checkbox" id="d4-4" class="number4">
+						<input type="checkbox" id="d4-5" class="number5">
+						<input type="checkbox" id="d4-6" class="number6">
+						<input type="checkbox" id="d4-7" class="number7">
+						<input type="checkbox" id="d4-8" class="number8">
+						<input type="checkbox" id="d4-9" class="number9">
+						<div id="digit5">
+							<input type="checkbox" id="d5-0" class="number0">
+							<input type="checkbox" id="d5-1" class="number1">
+							<input type="checkbox" id="d5-2" class="number2">
+							<input type="checkbox" id="d5-3" class="number3">
+							<input type="checkbox" id="d5-4" class="number4">
+							<input type="checkbox" id="d5-5" class="number5">
+							<input type="checkbox" id="d5-6" class="number6">
+							<input type="checkbox" id="d5-7" class="number7">
+							<input type="checkbox" id="d5-8" class="number8">
+							<input type="checkbox" id="d5-9" class="number9">
+							<div id="digit6">
+								<input type="checkbox" id="d6-0" class="number0">
+								<input type="checkbox" id="d6-1" class="number1">
+								<input type="checkbox" id="d6-2" class="number2">
+								<input type="checkbox" id="d6-3" class="number3">
+								<input type="checkbox" id="d6-4" class="number4">
+								<input type="checkbox" id="d6-5" class="number5">
+								<input type="checkbox" id="d6-6" class="number6">
+								<input type="checkbox" id="d6-7" class="number7">
+								<input type="checkbox" id="d6-8" class="number8">
+								<input type="checkbox" id="d6-9" class="number9">
+								<div id="digit7">
+									<input type="checkbox" id="d7-0" class="number0">
+									<input type="checkbox" id="d7-1" class="number1">
+									<input type="checkbox" id="d7-2" class="number2">
+									<input type="checkbox" id="d7-3" class="number3">
+									<input type="checkbox" id="d7-4" class="number4">
+									<input type="checkbox" id="d7-5" class="number5">
+									<input type="checkbox" id="d7-6" class="number6">
+									<input type="checkbox" id="d7-7" class="number7">
+									<input type="checkbox" id="d7-8" class="number8">
+									<input type="checkbox" id="d7-9" class="number9">
+									<div id="digit8">
+										<input type="checkbox" id="d8-0" class="number0">
+										<input type="checkbox" id="d8-1" class="number1">
+										<input type="checkbox" id="d8-2" class="number2">
+										<input type="checkbox" id="d8-3" class="number3">
+										<input type="checkbox" id="d8-4" class="number4">
+										<input type="checkbox" id="d8-5" class="number5">
+										<input type="checkbox" id="d8-6" class="number6">
+										<input type="checkbox" id="d8-7" class="number7">
+										<input type="checkbox" id="d8-8" class="number8">
+										<input type="checkbox" id="d8-9" class="number9">
+										<div id="operations">
+											<input type="checkbox" id="add">
+											<input type="checkbox" id="subtract">
+											<input type="checkbox" id="multiply">
+											<input type="checkbox" id="divide">
+											<input type="checkbox" id="equals">
+											<main>
+												<div id="screen">
+													<div id="input"></div>
+													<div id="output"></div>
+												</div>
+												<div id="buttons">
+													<button type="button">
+														<label for="d8-7" class="digit8"></label>
+														<label for="d7-7" class="digit7"></label>
+														<label for="d6-7" class="digit6"></label>
+														<label for="d5-7" class="digit5"></label>
+														<label for="d4-7" class="digit4"></label>
+														<label for="d3-7" class="digit3"></label>
+														<label for="d2-7" class="digit2"></label>
+														<label for="d1-7" class="digit1"></label>
+														7
+													</button>
+													<button type="button">
+														<label for="d8-8" class="digit8"></label>
+														<label for="d7-8" class="digit7"></label>
+														<label for="d6-8" class="digit6"></label>
+														<label for="d5-8" class="digit5"></label>
+														<label for="d4-8" class="digit4"></label>
+														<label for="d3-8" class="digit3"></label>
+														<label for="d2-8" class="digit2"></label>
+														<label for="d1-8" class="digit1"></label>
+														8
+													</button>
+													<button type="button">
+														<label for="d8-9" class="digit8"></label>
+														<label for="d7-9" class="digit7"></label>
+														<label for="d6-9" class="digit6"></label>
+														<label for="d5-9" class="digit5"></label>
+														<label for="d4-9" class="digit4"></label>
+														<label for="d3-9" class="digit3"></label>
+														<label for="d2-9" class="digit2"></label>
+														<label for="d1-9" class="digit1"></label>
+														9
+													</button>
+													<button type="button"><label for="divide"></label>&divide;</button>
+													<button type="button">
+														<label for="d8-4" class="digit8"></label>
+														<label for="d7-4" class="digit7"></label>
+														<label for="d6-4" class="digit6"></label>
+														<label for="d5-4" class="digit5"></label>
+														<label for="d4-4" class="digit4"></label>
+														<label for="d3-4" class="digit3"></label>
+														<label for="d2-4" class="digit2"></label>
+														<label for="d1-4" class="digit1"></label>
+														4
+													</button>
+													<button type="button">
+														<label for="d8-5" class="digit8"></label>
+														<label for="d7-5" class="digit7"></label>
+														<label for="d6-5" class="digit6"></label>
+														<label for="d5-5" class="digit5"></label>
+														<label for="d4-5" class="digit4"></label>
+														<label for="d3-5" class="digit3"></label>
+														<label for="d2-5" class="digit2"></label>
+														<label for="d1-5" class="digit1"></label>
+														5
+													</button>
+													<button type="button">
+														<label for="d8-6" class="digit8"></label>
+														<label for="d7-6" class="digit7"></label>
+														<label for="d6-6" class="digit6"></label>
+														<label for="d5-6" class="digit5"></label>
+														<label for="d4-6" class="digit4"></label>
+														<label for="d3-6" class="digit3"></label>
+														<label for="d2-6" class="digit2"></label>
+														<label for="d1-6" class="digit1"></label>
+														6
+													</button>
+													<button type="button"><label for="multiply"></label>&times;</button>
+													<button type="button">
+														<label for="d8-1" class="digit8"></label>
+														<label for="d7-1" class="digit7"></label>
+														<label for="d6-1" class="digit6"></label>
+														<label for="d5-1" class="digit5"></label>
+														<label for="d4-1" class="digit4"></label>
+														<label for="d3-1" class="digit3"></label>
+														<label for="d2-1" class="digit2"></label>
+														<label for="d1-1" class="digit1"></label>
+														1
+													</button>
+													<button type="button">
+														<label for="d8-2" class="digit8"></label>
+														<label for="d7-2" class="digit7"></label>
+														<label for="d6-2" class="digit6"></label>
+														<label for="d5-2" class="digit5"></label>
+														<label for="d4-2" class="digit4"></label>
+														<label for="d3-2" class="digit3"></label>
+														<label for="d2-2" class="digit2"></label>
+														<label for="d1-2" class="digit1"></label>
+														2
+													</button>
+													<button type="button">
+														<label for="d8-3" class="digit8"></label>
+														<label for="d7-3" class="digit7"></label>
+														<label for="d6-3" class="digit6"></label>
+														<label for="d5-3" class="digit5"></label>
+														<label for="d4-3" class="digit4"></label>
+														<label for="d3-3" class="digit3"></label>
+														<label for="d2-3" class="digit2"></label>
+														<label for="d1-3" class="digit1"></label>
+														3
+													</button>
+													<button type="button"><label for="subtract"></label>-</button>
+													<button type="button"><input type="reset" value="AC"></button>
+													<button type="button">
+														<label for="d8-0" class="digit8"></label>
+														<label for="d7-0" class="digit7"></label>
+														<label for="d6-0" class="digit6"></label>
+														<label for="d5-0" class="digit5"></label>
+														<label for="d4-0" class="digit4"></label>
+														<label for="d3-0" class="digit3"></label>
+														<label for="d2-0" class="digit2"></label>
+														<label for="d1-0" class="digit1"></label>
+														0
+													</button>
+													<button type="button"><label for="equals"></label>=</button>
+													<button type="button"><label for="add"></label>+</button>
+												</div>
+											</main>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+	<button id="why">
+		<svg viewBox="0 0 24 24">
+			<path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" style="fill:currentColor;"/>
+		</svg>
+	</button>
+	<section>
+		<h1>How and why?</h1>
+		<p>Why? Well, because it is possible. Essentially, I enjoy taking things to extremes and making things that some people might think are not possible.</p>
+		<p>
+			How did I do it? Well, it's a mix of using CSS variables, a fitting HTML structure with over 80 checkboxes and labels, calc() for the math, and CSS counters to output things. Have a look at the source code! I promise, there's absolutely zero Javascript. Even this dialog is pure CSS!
+		</p>
+		<p>PS: unfortunately Google Chrome doesn't like it when you divide with calc(). It should work according to the specs, but it doesn't. Bummer. Try it in Firefox!
+	</section>
+<!-- partial -->
+  
+</body>
+</html>
