@@ -7,7 +7,7 @@
 
 <body>
     <script>
-        var client = mqtt.connect("ws://mqttgo.io:8000/mqtt") // you add a ws:// url here
+        var client = mqtt.connect("wss://broker.mqttgo.io:8084/mqtt") // you add a ws:// url here
         client.on('connect', function () {
             client.subscribe('presence', function (err) {
                 if (!err) {
