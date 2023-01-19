@@ -1,19 +1,23 @@
 <html>
 
 <head>
-    <title>智能枕頭鬧鐘-專治小孩不起床</title>
+    <title>智能枕頭鬧鐘-專治賴床</title>
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <script src='./jquery.min.js'></script>
 </head>
 
 <body>
+
+    <h1>智能枕頭鬧鐘-專治小孩不起床</h1>
+
     <script>
-        var client = mqtt.connect("wss://broker.mqttgo.io:8084/mqtt") // you add a ws:// url here
+        var client = mqtt.connect("wss://broker.mqttgo.io:8084/mqtt") // you add a wss:// url here
         client.on('connect', function () {
             client.subscribe('presence', function (err) {
                 if (!err) {
                     client.publish('mqtt/AlarmClockFirst', 'Im in~')
                 }
-                else{
+                else {
                     console.log("error to MQTT")
                 }
             })
@@ -24,6 +28,37 @@
             console.log(message.toString())
             // client.end()
         })
+
+
+
+        var spreadsheet_id = "1DbftDAuDCgde_yJFRJG963JT3tfoRhnglAL7GbwQyCQ", // 填入試算表 ID
+            tab_name = "Sheet1", // 填入工作表名稱
+            api_key = "AIzaSyAopwFo-HUJoueaUofacYDUeZGb2cSvQ5s", // 填入 API 金鑰
+            url = "https://sheets.googleapis.com/v4/spreadsheets/" + spreadsheet_id + "/values/" + tab_name + "?key=" + api_key;
+
+        $.getJSON(url, function (json) {
+            var values = json.values, // 所有試算表資料
+                html = "";
+
+            html += "<table>";
+
+            values.forEach(function (rows) {
+                html += "<tr>";
+
+                rows.forEach(function (item) {
+                    html += "<td>" + item + "</td>";
+                });
+
+                html += "</tr>";
+            });
+
+            html += "</table>";
+
+            $("#wfu_sheet_json").html(html);
+        });
+
+
+
 
         console.log("The END")
     </script>
