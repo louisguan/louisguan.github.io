@@ -33,8 +33,6 @@
 
         $(document).ready(function () {
             $("button").click(function () {
-                console.log("G API")
-
                 $.getJSON(url, function (result) {
                     $.each(result, function (i, field) {
                         $("p").append(field + " ");
