@@ -1,0 +1,32 @@
+<html>
+
+<head>
+    <title>智能枕頭鬧鐘-專治賴床</title>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+</head>
+
+<body>
+    <script>
+        var client = mqtt.connect("ws://mqttgo.io:8000/mqtt") // you add a ws:// url here
+        client.on('connect', function () {
+            client.subscribe('presence', function (err) {
+                if (!err) {
+                    client.publish('mqtt/AlarmClockFirst', 'Im in~')
+                }
+                else{
+                    console.log("error to MQTT")
+                }
+            })
+        })
+
+        client.on('message', function (topic, message) {
+            // message is Buffer
+            console.log(message.toString())
+            // client.end()
+        })
+
+        console.log("The END")
+    </script>
+</body>
+
+</html>
