@@ -59,13 +59,16 @@
         <div class="login-card" style="background: var(--bs-gray-100);margin-top: -140px;"><img class="profile-img-card" src="assets/img/about/4.jpg?h=dd75735e722d131b77b4cf11c203f0fa">
             <h2 class="text-center">登入立即體驗</h2>
             <p class="profile-name-card"> </p>
-            <form class="form-signin"><span class="reauth-email"> </span><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-people-fill shadow">
+            <form class="form-signin" method="get" action="https://script.google.com/macros/s/AKfycbwkudS1Fa87XCrNUHMvKKcGs5HCG9JxajuMuFHXRdCbL2Y-RIrdgidW5eD0S5xiYxYy/exec?"><span class="reauth-email"> </span><select class="form-select" name="Method" autofocus="">
+                    <option value="login" selected="">登入</option>
+                    <option value="alarmClock">設定鬧鐘</option>
+                </select><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-people-fill shadow">
                     <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
                     <path fill-rule="evenodd" d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"></path>
                     <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"></path>
-                </svg><input class="form-control" type="email" id="inputEmail" required="" placeholder="Email address" autofocus="" style="width: 270;"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-shield-fill-exclamation shadow">
+                </svg><input class="form-control" type="email" id="ACCO" required="" placeholder="Email address" autofocus="" style="width: 270;" name="ACCO"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-shield-fill-exclamation shadow">
                     <path fill-rule="evenodd" d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.777 11.777 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24a7.159 7.159 0 0 0 1.048-.625 11.775 11.775 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.541 1.541 0 0 0-1.044-1.263 62.467 62.467 0 0 0-2.887-.87C9.843.266 8.69 0 8 0zm-.55 8.502L7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0zM8.002 12a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"></path>
-                </svg><input class="form-control" type="password" id="inputPassword" required="" placeholder="Password">
+                </svg><input class="form-control" type="password" id="PSWD" required="" placeholder="Password" name="PSWD">
                 <div class="checkbox">
                     <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1"><label class="form-check-label" for="formCheck-1">Remember me</label></div>
                 </div><button class="btn btn-primary btn-lg d-block btn-signin w-100" type="submit" style="padding-top: 0px;min-height: 0px;">Sign in</button>
