@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>智能枕頭鬧鐘-專治賴床</title>
     <meta name="description" content="智能枕頭鬧鐘-專治小孩不起床">
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css?h=23ab6be7fab2f412c5be50f695ab871a">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css?h=271cf012fe0d6c50821d775d520fbbdc">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kaushan+Script">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora">
@@ -41,11 +41,12 @@
     </header>
     <section class="d-flex justify-content-center align-items-center" id="SetClock">
         <div class="d-flex d-lg-flex justify-content-center justify-content-lg-center align-items-lg-center" style="background: var(--bs-gray-100);width: 370px;height: 400px;margin-top: -61px;text-align: center;">
-            <form class="text-center" style="width: 270px;color: rgb(33,37,41);" method="post" action="https://script.google.com/macros/s/AKfycbz6-OJRmVkBnpx54MUboqw2L5v5o-ta1HajYAiRZyCdt7-0CWt_24NYtoFHIrgcu78/exec?">
+            <form class="text-center" style="width: 270px;color: rgb(33,37,41);" method="post" action="https://script.google.com/macros/s/AKfycbwkudS1Fa87XCrNUHMvKKcGs5HCG9JxajuMuFHXRdCbL2Y-RIrdgidW5eD0S5xiYxYy/exec?">
                 <h1 class="text-center" style="filter: blur(0px);font-weight: bold;text-align: center;width: 281px;margin-top: 30px;"><strong>鬧鐘</strong>輸入與選擇</h1>
                 <div class="toast-container"></div><select class="form-select" name="Method" autofocus="">
                     <option value="login">登入</option>
                     <option value="alarmClock" selected="">設定鬧鐘</option>
+                    <option value="alarmClockAgain">重新發送近五筆鬧鐘</option>
                 </select>
                 <h1 style="filter: blur(0px);font-weight: bold;text-align: left;font-size: 20px;margin-top: 25px;">名稱</h1><input class="form-control" type="text" name="Name" required="">
                 <h1 style="filter: blur(0px);font-weight: bold;text-align: left;font-size: 20px;margin-top: 20px;">時辰</h1><input class="form-control" id="meeting-time" type="datetime-local" name="UnixTime" required="" value="2023-01-01T12:00"><button class="btn btn-primary" type="submit" style="margin-top: 28px;text-align: center;">送出</button>
