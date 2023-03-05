@@ -1,4 +1,4 @@
-Blockly.Arduino['tft_espi'] = function(block) {
+Blockly.Arduino['tft_init'] = function(block) {
   var dropdown___ = block.getFieldValue('種類');
   var text_miso = block.getFieldValue('miso');
   var text_mosi = block.getFieldValue('mosi');

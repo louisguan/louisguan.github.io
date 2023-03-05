@@ -1,4 +1,4 @@
-Blockly.Blocks['tft_espi'] = {
+Blockly.Blocks['tft_init'] = {
   init: function() {
     this.appendDummyInput()
         .appendField(new Blockly.FieldLabelSerializable("初始化 TFT顯示"), "初始化 TFT顯示")
