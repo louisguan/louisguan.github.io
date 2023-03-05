@@ -7,6 +7,9 @@ Blockly.Arduino['tft_espi'] = function(block) {
   var text_dc = block.getFieldValue('dc');
   var text_rst = block.getFieldValue('rst');
   // TODO: Assemble Arduino into code variable.
+
+  Blockly.Arduino.definitions_.tftinitial = '#include <TFT_eSPI.h>\n';
+  
   var code='';
 
   code +='tft.init();\n';
