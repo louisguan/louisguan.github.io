@@ -14,8 +14,8 @@
     <input type="text" id="inputData" placeholder="e.g., 15 03 00 31 00 01">
 
     <button onclick="calculateCRC()">Calculate CRC</button>
-    <button onclick="Copy()">Copy Result</button>
-    
+    <button onclick="copyToClipboard()">Copy Result</button>
+
 
 
     <hr style="border-color:#f00;">
@@ -161,7 +161,7 @@
 
     <br><br>
     <button onclick="calculateCRC2()">Calculate CRC</button>
-    <button onclick="Copy()">Copy Result</button>
+    <button onclick="copyToClipboard()">Copy Result</button>
     <p id="result"></p>
 
 
@@ -185,7 +185,7 @@
 
 
 
-    
+
 
     <script>
         function calculateCRC() {
@@ -206,7 +206,7 @@
 
         function calculateCRC2() {
             const _slaveID = document.getElementById("SlaveID").value;
-            const _function =document.getElementById("Function").value;
+            const _function = document.getElementById("Function").value;
             const _fan1 = document.getElementById("FAN1").value;
             const _fan2 = document.getElementById("FAN2").value;
             const _fan3 = document.getElementById("FAN3").value;
@@ -266,8 +266,15 @@
             return decValues;
         }
 
-        function Copy() {
-
+        function copyToClipboard() {
+            const _result = document.getElementById("result").textContent;
+            const tempInput = document.createElement("input");
+            tempInput.value = _result;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            alert("成功複製囉!");
         }
     </script>
 </body>
