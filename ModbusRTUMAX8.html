@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modbus RTU CRC Calculator</title>
+</head>
+<body>
+    <h1>Modbus RTU CRC Calculator</h1>
+    <label for="inputData">Enter Modbus Data (Hex):</label>
+    <input type="text" id="inputData" placeholder="e.g., 150300310001">
+    <button onclick="calculateCRC()">Calculate CRC</button>
+    <p id="result"></p>
+
+    <script>
+        function calculateCRC() {
+            const inputData = document.getElementById("inputData").value.replace(/\s/g, ''); // Remove spaces
+            const crcValue = calculateModbusCRC(inputData);
+            const decimalValues = convertHexToDec(inputData); // Convert input data from Hex to Dec
+
+            // Display results
+            const resultText = `Input Data (Dec): ${decimalValues.join(', ')}, ${crcValue}`;
+            document.getElementById("result").textContent = resultText;
+        }
+
+        function calculateModbusCRC(data) {
+            // Convert input data to bytes
+            const bytes = [];
+            for (let i = 0; i < data.length; i += 2) {
+                bytes.push(parseInt(data.substr(i, 2), 16));
+            }
+
+            // Calculate CRC
+            let crc = 0xFFFF;
+            for (const byte of bytes) {
+                crc ^= byte;
+                for (let i = 0; i < 8; i++) {
+                    if (crc & 1) {
+                        crc = (crc >> 1) ^ 0xA001;
+                    } else {
+                        crc >>= 1;
+                    }
+                }
+            }
+
+            // Swap high and low bytes
+            const highByte = (crc >> 8) & 0xFF;
+            const lowByte = crc & 0xFF;
+            return `${lowByte},${highByte}`; // High and low bytes separated by a comma
+        }
+
+        function convertHexToDec(hexData) {
+            const decValues = [];
+            for (let i = 0; i < hexData.length; i += 2) {
+                decValues.push(parseInt(hexData.substr(i, 2), 16));
+            }
+            return decValues;
+        }
+    </script>
+</body>
+</html>
