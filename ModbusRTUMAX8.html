@@ -1,25 +1,234 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modbus RTU CRC Calculator</title>
 </head>
+
 <body>
-    <h1>官帥製 Modbus RTU CRC Calculator</h1>
+    <h1>Modbus RTU CRC Calculator</h1>
+
     <label for="inputData">Enter Modbus Data (Hex):</label>
     <input type="text" id="inputData" placeholder="e.g., 15 03 00 31 00 01">
+
     <button onclick="calculateCRC()">Calculate CRC</button>
+    <button onclick="Copy()">Copy Result</button>
+    
+
+
+    <hr style="border-color:#f00;">
+
+
+    <label for="inputData">從端地址: </label>
+    <select id="SlaveID">
+        <optgroup label="選擇從端裝置地址">
+            <option value="01" selected>0x01</option>
+            <option value="02">0x02</option>
+            <option value="03">0x03</option>
+            <option value="04">0x04</option>
+            <option value="05">0x05</option>
+            <option value="06">0x06</option>
+            <option value="07">0x07</option>
+            <option value="08">0x08</option>
+            <option value="09">0x09</option>
+            <option value="0A">0x10</option>
+            <option value="0B">0x11</option>
+            <option value="0C">0x12</option>
+            <option value="0D">0x13</option>
+            <option value="0E">0x14</option>
+            <option value="0F">0x15</option>
+            <option value="10">0x16</option>
+            <option value="11">0x17</option>
+            <option value="12">0x18</option>
+            <option value="13">0x19</option>
+            <option value="14">0x20</option>
+        </optgroup>
+    </select>
+
+    <br>
+    <label for="inputData">功能: </label>
+    <select id="Function">
+        <optgroup label="選擇功能">
+            <option value="1">01 (0x01) Read Coils</option>
+            <option value="2">02 (0x02) Read Discrete Inputs</option>
+            <option value="3">03 (0x03) Read Holding Registers</option>
+            <option value="4">04 (0x04) Read Input Registers</option>
+            <option value="5">05 (0x05) Write Single Coil</option>
+            <option value="6">06 (0x06) Write Single Register</option>
+            <option value="8">08 (0x08) Diagnostics (Serial Line only)</option>
+            <option value="B">11 (0x0B) Get Comm Event Counter (Serial Line only)</option>
+            <option value="F">15 (0x0F) Write Multiple Coils</option>
+            <option value="10" selected>16 (0x10) Write Multiple Registers</option>
+            <option value="11">17 (0x11) Report Server ID (Serial Line only)</option>
+            <option value="16">22 (0x16) Mask Write Register</option>
+            <option value="17">23 (0x17) Read/Write Multiple Registers</option>
+            <option value="2B">43 / 14 (0x2B / 0x0E) Read Device Identification</option>
+        </optgroup>
+    </select>
+
+    <hr>
+    <label for="inputData">風扇01: </label>
+    <select id="FAN1">
+        <optgroup label="風扇1">
+            <option value="01">開</option>
+            <option value="00" selected>關</option>
+        </optgroup>
+    </select>
+
+    <br>
+    <label for="inputData">風扇02: </label>
+    <select id="FAN2">
+        <optgroup label="風扇2">
+            <option value="01">開</option>
+            <option value="00" selected>關</option>
+        </optgroup>
+    </select>
+
+    <br>
+    <label for="inputData">風扇03: </label>
+    <select id="FAN3">
+        <optgroup label="風扇3">
+            <option value="01">開</option>
+            <option value="00" selected>關</option>
+        </optgroup>
+    </select>
+
+    <br>
+    <label for="inputData">風扇04: </label>
+    <select id="FAN4">
+        <optgroup label="風扇4">
+            <option value="01">開</option>
+            <option value="00" selected>關</option>
+        </optgroup>
+    </select>
+
+    <br>
+    <label for="inputData">風扇05: </label>
+    <select id="FAN5">
+        <optgroup label="風扇5">
+            <option value="01">開</option>
+            <option value="00" selected>關</option>
+        </optgroup>
+    </select>
+
+    <br>
+    <label for="inputData">風扇06: </label>
+    <select id="FAN6">
+        <optgroup label="風扇6">
+            <option value="01">開</option>
+            <option value="00" selected>關</option>
+        </optgroup>
+    </select>
+
+    <br>
+    <label for="inputData">風扇07: </label>
+    <select id="FAN7">
+        <optgroup label="風扇7">
+            <option value="01">開</option>
+            <option value="00" selected>關</option>
+        </optgroup>
+    </select>
+
+    <br>
+    <label for="inputData">風扇08: </label>
+    <select id="FAN8">
+        <optgroup label="風扇8">
+            <option value="01">開</option>
+            <option value="00" selected>關</option>
+        </optgroup>
+    </select>
+
+    <br>
+    <label for="inputData">風扇09: </label>
+    <select id="FAN9">
+        <optgroup label="風扇9">
+            <option value="01">開</option>
+            <option value="00" selected>關</option>
+        </optgroup>
+    </select>
+
+    <br>
+    <label for="inputData">風扇10: </label>
+    <select id="FAN10">
+        <optgroup label="風扇10">
+            <option value="01">開</option>
+            <option value="00" selected>關</option>
+        </optgroup>
+    </select>
+
+
+    <br><br>
+    <button onclick="calculateCRC2()">Calculate CRC</button>
+    <button onclick="Copy()">Copy Result</button>
     <p id="result"></p>
+
+
+    <hr style="border-color:#f00;">
+
+
+
+
+
+
+
+
+    <p id="result"></p>
+
+
+
+
+
+
+
+
+
+
+    
 
     <script>
         function calculateCRC() {
             const inputData = document.getElementById("inputData").value.replace(/\s/g, ''); // Remove spaces
+
+            if (inputData === "") {
+                alert("請輸入正確的數據歐(HEX)");
+                return;
+            }
+
             const crcValue = calculateModbusCRC(inputData);
             const decimalValues = convertHexToDec(inputData); // Convert input data from Hex to Dec
 
             // Display results
-            const resultText = `Input Data (Dec): ${decimalValues.join(', ')}, ${crcValue}`;
+            const resultText = `輸出結果(Dec): ${decimalValues.join(', ')}, ${crcValue}`;
+            document.getElementById("result").textContent = resultText;
+        }
+
+        function calculateCRC2() {
+            const _slaveID = document.getElementById("SlaveID").value;
+            const _function =document.getElementById("Function").value;
+            const _fan1 = document.getElementById("FAN1").value;
+            const _fan2 = document.getElementById("FAN2").value;
+            const _fan3 = document.getElementById("FAN3").value;
+            const _fan4 = document.getElementById("FAN4").value;
+            const _fan5 = document.getElementById("FAN5").value;
+            const _fan6 = document.getElementById("FAN6").value;
+            const _fan7 = document.getElementById("FAN7").value;
+            const _fan8 = document.getElementById("FAN8").value;
+            const _fan9 = document.getElementById("FAN9").value;
+            const generateString = `${_slaveID}${_function}00${_fan1}00${_fan2}00${_fan3}00${_fan4}00${_fan5}00${_fan6}00${_fan7}00${_fan8}00${_fan9}`;
+            console.log(generateString);
+
+            if (generateString === "") {
+                alert("請輸入正確的數據歐(HEX)");
+                return;
+            }
+
+            const crcValue = calculateModbusCRC(generateString);
+            const decimalValues = convertHexToDec(generateString); // Convert input data from Hex to Dec
+
+            // Display results
+            const resultText = `輸出結果(Dec): ${decimalValues.join(', ')}, ${crcValue}`;
             document.getElementById("result").textContent = resultText;
         }
 
@@ -56,6 +265,11 @@
             }
             return decValues;
         }
+
+        function Copy() {
+
+        }
     </script>
 </body>
+
 </html>
