@@ -9,7 +9,11 @@
 
 <body>
     <h1>Modbus RTU CRC Calculator</h1>
+    <hr style="border-color:#f00;">
+    </hr>
 
+
+    <h2>[直接輸入模式]</h2>
     <label for="inputData">Enter Modbus Data (Hex):</label>
     <input type="text" id="inputData" placeholder="e.g., 15 03 00 31 00 01">
 
@@ -17,10 +21,7 @@
     <button onclick="copyToClipboard()">Copy Result</button>
 
 
-
-    <hr style="border-color:#f00;">
-
-
+    <h2>[選項輸入模式]</h2>
     <label for="inputData">從端地址: </label>
     <select id="SlaveID">
         <optgroup label="選擇從端裝置地址">
@@ -47,19 +48,19 @@
         </optgroup>
     </select>
 
-    <br>
+    </br>
     <label for="inputData">功能: </label>
     <select id="Function">
         <optgroup label="選擇功能">
-            <option value="1">01 (0x01) Read Coils</option>
-            <option value="2">02 (0x02) Read Discrete Inputs</option>
-            <option value="3">03 (0x03) Read Holding Registers</option>
-            <option value="4">04 (0x04) Read Input Registers</option>
-            <option value="5">05 (0x05) Write Single Coil</option>
-            <option value="6">06 (0x06) Write Single Register</option>
-            <option value="8">08 (0x08) Diagnostics (Serial Line only)</option>
-            <option value="B">11 (0x0B) Get Comm Event Counter (Serial Line only)</option>
-            <option value="F">15 (0x0F) Write Multiple Coils</option>
+            <option value="01">01 (0x01) Read Coils</option>
+            <option value="02">02 (0x02) Read Discrete Inputs</option>
+            <option value="03">03 (0x03) Read Holding Registers</option>
+            <option value="04">04 (0x04) Read Input Registers</option>
+            <option value="05">05 (0x05) Write Single Coil</option>
+            <option value="06">06 (0x06) Write Single Register</option>
+            <option value="08">08 (0x08) Diagnostics (Serial Line only)</option>
+            <option value="0B">11 (0x0B) Get Comm Event Counter (Serial Line only)</option>
+            <option value="0F">15 (0x0F) Write Multiple Coils</option>
             <option value="10" selected>16 (0x10) Write Multiple Registers</option>
             <option value="11">17 (0x11) Report Server ID (Serial Line only)</option>
             <option value="16">22 (0x16) Mask Write Register</option>
@@ -68,7 +69,30 @@
         </optgroup>
     </select>
 
+    </br>
+    <label for="inputData">起始地址: </label>
+    <select id="StartAddr">
+        <optgroup label="起始地址">
+            <option value="00" selected>0x00</option>
+            <option value="01">0x01</option>
+            <option value="02">0x02</option>
+            <option value="03">0x03</option>
+            <option value="04">0x04</option>
+            <option value="05">0x05</option>
+            <option value="06">0x06</option>
+            <option value="07">0x07</option>
+            <option value="08">0x08</option>
+            <option value="09">0x09</option>
+            <option value="0A">0x0A</option>
+        </optgroup>
+    </select>
+
+    <!-- </br>
+    <label for="inputData">數據數量: </label>
+    <input type="number" id="DataQuantity" name="quantity" placeholder="9" min="1" max="9"> -->
+
     <hr>
+    </hr>
     <label for="inputData">風扇01: </label>
     <select id="FAN1">
         <optgroup label="風扇1">
@@ -77,7 +101,7 @@
         </optgroup>
     </select>
 
-    <br>
+    </br>
     <label for="inputData">風扇02: </label>
     <select id="FAN2">
         <optgroup label="風扇2">
@@ -86,7 +110,7 @@
         </optgroup>
     </select>
 
-    <br>
+    </br>
     <label for="inputData">風扇03: </label>
     <select id="FAN3">
         <optgroup label="風扇3">
@@ -95,7 +119,7 @@
         </optgroup>
     </select>
 
-    <br>
+    </br>
     <label for="inputData">風扇04: </label>
     <select id="FAN4">
         <optgroup label="風扇4">
@@ -104,7 +128,7 @@
         </optgroup>
     </select>
 
-    <br>
+    </br>
     <label for="inputData">風扇05: </label>
     <select id="FAN5">
         <optgroup label="風扇5">
@@ -113,7 +137,7 @@
         </optgroup>
     </select>
 
-    <br>
+    </br>
     <label for="inputData">風扇06: </label>
     <select id="FAN6">
         <optgroup label="風扇6">
@@ -122,7 +146,7 @@
         </optgroup>
     </select>
 
-    <br>
+    </br>
     <label for="inputData">風扇07: </label>
     <select id="FAN7">
         <optgroup label="風扇7">
@@ -131,7 +155,7 @@
         </optgroup>
     </select>
 
-    <br>
+    </br>
     <label for="inputData">風扇08: </label>
     <select id="FAN8">
         <optgroup label="風扇8">
@@ -140,7 +164,7 @@
         </optgroup>
     </select>
 
-    <br>
+    </br>
     <label for="inputData">風扇09: </label>
     <select id="FAN9">
         <optgroup label="風扇9">
@@ -149,31 +173,24 @@
         </optgroup>
     </select>
 
-    <br>
-    <label for="inputData">風扇10: </label>
-    <select id="FAN10">
-        <optgroup label="風扇10">
-            <option value="01">開</option>
-            <option value="00" selected>關</option>
-        </optgroup>
-    </select>
-
-
-    <br><br>
+    </br></br>
     <button onclick="calculateCRC2()">Calculate CRC</button>
     <button onclick="copyToClipboard()">Copy Result</button>
     <p id="result"></p>
 
 
+
+
+
+
+
+
+
     <hr style="border-color:#f00;">
-
-
-
-
-
-
-
-
+    </hr>
+    <p id="resultRaw"></p>
+    <hr style="border-color:#f00;">
+    </hr>
     <p id="result"></p>
 
 
@@ -207,6 +224,22 @@
         function calculateCRC2() {
             const _slaveID = document.getElementById("SlaveID").value;
             const _function = document.getElementById("Function").value;
+            const _startAddr = document.getElementById("StartAddr").value;
+
+            // const _dataQuantity = document.getElementById("DataQuantity").value;
+            // const _hexDataQuantity = parseInt(_dataQuantity).toString(16).toUpperCase();
+            // console.log(_dataQuantity);
+            // console.log(_hexDataQuantity);
+
+            // if (_dataQuantity === "") {
+            //     alert("請輸入正確的數量歐~");
+            //     return;
+            // }
+
+            // const _ByteCount = _dataQuantity * 2;
+            // const _hexByteCount = _ByteCount.toString(16).toUpperCase();
+            // console.log(_hexByteCount);
+
             const _fan1 = document.getElementById("FAN1").value;
             const _fan2 = document.getElementById("FAN2").value;
             const _fan3 = document.getElementById("FAN3").value;
@@ -216,20 +249,18 @@
             const _fan7 = document.getElementById("FAN7").value;
             const _fan8 = document.getElementById("FAN8").value;
             const _fan9 = document.getElementById("FAN9").value;
-            const generateString = `${_slaveID}${_function}00${_fan1}00${_fan2}00${_fan3}00${_fan4}00${_fan5}00${_fan6}00${_fan7}00${_fan8}00${_fan9}`;
-            console.log(generateString);
-
-            if (generateString === "") {
-                alert("請輸入正確的數據歐(HEX)");
-                return;
-            }
+            // const generateString = `${_slaveID}${_function}00${_startAddr}00${_hexDataQuantity}${_hexByteCount}00${_fan1}00${_fan2}00${_fan3}00${_fan4}00${_fan5}00${_fan6}00${_fan7}00${_fan8}00${_fan9}`;
+            const generateString = `${_slaveID}${_function}00${_startAddr}00091200${_fan1}00${_fan2}00${_fan3}00${_fan4}00${_fan5}00${_fan6}00${_fan7}00${_fan8}00${_fan9}`;
+            // console.log(generateString);
 
             const crcValue = calculateModbusCRC(generateString);
             const decimalValues = convertHexToDec(generateString); // Convert input data from Hex to Dec
 
             // Display results
-            const resultText = `輸出結果(Dec): ${decimalValues.join(', ')}, ${crcValue}`;
+            const resultText = `${decimalValues.join(', ')}, ${crcValue}`;
             document.getElementById("result").textContent = resultText;
+            const resultRawRext = `原始輸入數據: ${generateString}`;
+            document.getElementById("resultRaw").textContent = resultRawRext;
         }
 
         function calculateModbusCRC(data) {
