@@ -13,7 +13,7 @@
     </hr>
 
 
-    <h2>[直接輸入模式]</h2>
+    <h2>[通用-直接輸入模式]</h2>
     <label for="inputData">Enter Modbus Data (Hex):</label>
     <input type="text" id="inputData" placeholder="e.g., 15 03 00 31 00 01">
 
@@ -21,30 +21,39 @@
     <button onclick="copyToClipboard()">Copy Result</button>
 
 
-    <h2>[選項輸入模式]</h2>
+    <h2>[風扇-選項輸入模式]</h2>
     <label for="inputData">從端地址: </label>
     <select id="SlaveID">
         <optgroup label="選擇從端裝置地址">
-            <option value="01" selected>0x01</option>
-            <option value="02">0x02</option>
-            <option value="03">0x03</option>
-            <option value="04">0x04</option>
-            <option value="05">0x05</option>
-            <option value="06">0x06</option>
-            <option value="07">0x07</option>
-            <option value="08">0x08</option>
-            <option value="09">0x09</option>
-            <option value="0A">0x10</option>
-            <option value="0B">0x11</option>
-            <option value="0C">0x12</option>
-            <option value="0D">0x13</option>
-            <option value="0E">0x14</option>
-            <option value="0F">0x15</option>
-            <option value="10">0x16</option>
-            <option value="11">0x17</option>
-            <option value="12">0x18</option>
-            <option value="13">0x19</option>
-            <option value="14">0x20</option>
+            <option value="01"selected>1:0x01</option>
+            <option value="02">2:0x02</option>
+            <option value="03">3:0x03</option>
+            <option value="04">4:0x04</option>
+            <option value="05">5:0x05</option>
+            <option value="06">6:0x06</option>
+            <option value="07">7:0x07</option>
+            <option value="08">8:0x08</option>
+            <option value="09">9:0x09</option>
+            <option value="0A">10:0x0A</option>
+            <option value="0B">11:0x0B</option>
+            <option value="0C">12:0x0C</option>
+            <option value="0D">13:0x0D</option>
+            <option value="0E">14:0x0E</option>
+            <option value="0F">15:0x0F</option>
+            <option value="10">16:0x10</option>
+            <option value="11">17:0x11</option>
+            <option value="12">18:0x12</option>
+            <option value="13">19:0x13</option>
+            <option value="14">20:0x14</option>
+            <option value="15">21:0x15</option>
+            <option value="16">22:0x16</option>
+            <option value="17">23:0x17</option>
+            <option value="18">24:0x18</option>
+            <option value="19">25:0x19</option>
+            <option value="1A">26:0x1A</option>
+            <option value="1B">27:0x1B</option>
+            <option value="1C">28:0x1C</option>
+            <option value="1D">29:0x1D</option>
         </optgroup>
     </select>
 
@@ -73,17 +82,17 @@
     <label for="inputData">起始地址: </label>
     <select id="StartAddr">
         <optgroup label="起始地址">
-            <option value="00" selected>0x00</option>
-            <option value="01">0x01</option>
-            <option value="02">0x02</option>
-            <option value="03">0x03</option>
-            <option value="04">0x04</option>
-            <option value="05">0x05</option>
-            <option value="06">0x06</option>
-            <option value="07">0x07</option>
-            <option value="08">0x08</option>
-            <option value="09">0x09</option>
-            <option value="0A">0x0A</option>
+            <option value="00" selected>0:0x00</option>
+            <option value="01">1:0x01</option>
+            <option value="02">2:0x02</option>
+            <option value="03">3:0x03</option>
+            <option value="04">4:0x04</option>
+            <option value="05">5:0x05</option>
+            <option value="06">6:0x06</option>
+            <option value="07">7:0x07</option>
+            <option value="08">8:0x08</option>
+            <option value="09">9:0x09</option>
+            <option value="0A">10:0x0A</option>
         </optgroup>
     </select>
 
@@ -176,25 +185,161 @@
     </br></br>
     <button onclick="calculateCRC2()">Calculate CRC</button>
     <button onclick="copyToClipboard()">Copy Result</button>
-    <p id="result"></p>
 
 
 
+    <h2>[步進馬達-選項輸入模式]</h2>
+    <label for="inputData">從端地址: </label>
+    <select id="SlaveID_stp">
+        <optgroup label="選擇從端裝置地址">
+            <option value="01"selected>1:0x01</option>
+            <option value="02">2:0x02</option>
+            <option value="03">3:0x03</option>
+            <option value="04">4:0x04</option>
+            <option value="05">5:0x05</option>
+            <option value="06">6:0x06</option>
+            <option value="07">7:0x07</option>
+            <option value="08">8:0x08</option>
+            <option value="09">9:0x09</option>
+            <option value="0A">10:0x0A</option>
+            <option value="0B">11:0x0B</option>
+            <option value="0C">12:0x0C</option>
+            <option value="0D">13:0x0D</option>
+            <option value="0E">14:0x0E</option>
+            <option value="0F">15:0x0F</option>
+            <option value="10">16:0x10</option>
+            <option value="11">17:0x11</option>
+            <option value="12">18:0x12</option>
+            <option value="13">19:0x13</option>
+            <option value="14">20:0x14</option>
+            <option value="15">21:0x15</option>
+            <option value="16">22:0x16</option>
+            <option value="17">23:0x17</option>
+            <option value="18">24:0x18</option>
+            <option value="19">25:0x19</option>
+            <option value="1A">26:0x1A</option>
+            <option value="1B">27:0x1B</option>
+            <option value="1C">28:0x1C</option>
+            <option value="1D">29:0x1D</option>
+        </optgroup>
+    </select>
 
+    </br>
+    <label for="inputData">功能: </label>
+    <select id="Function_stp">
+        <optgroup label="選擇功能">
+            <option value="01">01 (0x01) Read Coils</option>
+            <option value="02">02 (0x02) Read Discrete Inputs</option>
+            <option value="03">03 (0x03) Read Holding Registers</option>
+            <option value="04">04 (0x04) Read Input Registers</option>
+            <option value="05">05 (0x05) Write Single Coil</option>
+            <option value="06">06 (0x06) Write Single Register</option>
+            <option value="08">08 (0x08) Diagnostics (Serial Line only)</option>
+            <option value="0B">11 (0x0B) Get Comm Event Counter (Serial Line only)</option>
+            <option value="0F">15 (0x0F) Write Multiple Coils</option>
+            <option value="10" selected>16 (0x10) Write Multiple Registers</option>
+            <option value="11">17 (0x11) Report Server ID (Serial Line only)</option>
+            <option value="16">22 (0x16) Mask Write Register</option>
+            <option value="17">23 (0x17) Read/Write Multiple Registers</option>
+            <option value="2B">43 / 14 (0x2B / 0x0E) Read Device Identification</option>
+        </optgroup>
+    </select>
 
+    </br>
+    <label for="inputData">起始地址: </label>
+    <select id="StartAddr_stp">
+        <optgroup label="起始地址">
+            <option value="00" selected>0:0x00</option>
+            <option value="01">1:0x01</option>
+            <option value="02">2:0x02</option>
+            <option value="03">3:0x03</option>
+            <option value="04">4:0x04</option>
+            <option value="05">5:0x05</option>
+            <option value="06">6:0x06</option>
+            <option value="07">7:0x07</option>
+            <option value="08">8:0x08</option>
+            <option value="09">9:0x09</option>
+            <option value="0A">10:0x0A</option>
+        </optgroup>
+    </select>
 
+    <hr>
+    </hr>
+    <label for="inputData">步進馬達01: </label>
+    <select id="STP1">
+        <optgroup label="步進馬達1">
+            <option value="01">開</option>
+            <option value="00" selected>關</option>
+        </optgroup>
+    </select>
 
+    </br>
+    <label for="inputData">步進馬達02: </label>
+    <select id="STP2">
+        <optgroup label="步進馬達2">
+            <option value="01">開</option>
+            <option value="00" selected>關</option>
+        </optgroup>
+    </select>
+
+    </br>
+    <label for="inputData">步進馬達03: </label>
+    <select id="STP3">
+        <optgroup label="步進馬達3">
+            <option value="01">開</option>
+            <option value="00" selected>關</option>
+        </optgroup>
+    </select>
+
+    </br>
+    <label for="inputData">步進馬達04: </label>
+    <select id="STP4">
+        <optgroup label="步進馬達4">
+            <option value="01">開</option>
+            <option value="00" selected>關</option>
+        </optgroup>
+    </select>
+
+    </br>
+    <label for="inputData">步進馬達05: </label>
+    <select id="STP5">
+        <optgroup label="步進馬達5">
+            <option value="01">開</option>
+            <option value="00" selected>關</option>
+        </optgroup>
+    </select>
+
+    </br>
+    <label for="inputData">步進馬達06: </label>
+    <select id="STP6">
+        <optgroup label="步進馬達6">
+            <option value="01">開</option>
+            <option value="00" selected>關</option>
+        </optgroup>
+    </select>
+
+    </br>
+    <label for="inputData">Delay uS: </label>
+    <input type="number" id="Speed" name="quantity" value="100" placeholder="建議範圍10-5000" oninput="if(value>5000)value=5000" min="1" max="99999999999">
+
+    </br></br>
+    <button onclick="calculateCRC3()">Calculate CRC</button>
+    <button onclick="copyToClipboard()">Copy Result</button>
 
 
     <hr style="border-color:#f00;">
     </hr>
+
+    <hr style="border-color:#f00;">
+    </hr>
+
     <p id="resultRaw"></p>
-    <hr style="border-color:#f00;">
-    </hr>
     <p id="result"></p>
 
-
-
+    <p><a href="https://www.modbustools.com/modbus.html#function16">Modbus Protocol Description</a></p>
+    <p><a
+            href="https://www.rapidtables.com/convert/number/ascii-hex-bin-dec-converter.html?fbclid=IwAR1frBQrSBhrBeM_Y_zF1Q1-zBD4H-POEie4wfvVhQs-mWuouTMw4Y8Bmj8">ASCII,
+            Hex, Binary, Decimal, Base64 converter</a></p>
 
 
 
@@ -219,6 +364,48 @@
             // Display results
             const resultText = `輸出結果(Dec): ${decimalValues.join(', ')}, ${crcValue}`;
             document.getElementById("result").textContent = resultText;
+        }
+
+        function calculateCRC3() {
+            const _slaveID = document.getElementById("SlaveID_stp").value;
+            const _function = document.getElementById("Function_stp").value;
+            const _startAddr = document.getElementById("StartAddr_stp").value;
+
+            const _STP1 = document.getElementById("STP1").value;
+            const _STP2 = document.getElementById("STP2").value;
+            const _STP3 = document.getElementById("STP3").value;
+            const _STP4 = document.getElementById("STP4").value;
+            const _STP5 = document.getElementById("STP5").value;
+            const _STP6 = document.getElementById("STP6").value;
+
+            const _SpeedHex = parseInt(document.getElementById("Speed").value).toString(16).toUpperCase();
+            const tmpLength = _SpeedHex.toString().length;
+            var _Speeds = "";
+            var _Speed = "";
+            if (tmpLength < 2) {
+                _Speed = _Speeds.concat('000', _SpeedHex);
+                console.log(_Speed);
+            } else if (tmpLength < 3 && tmpLength >= 2) {
+                _Speed = _Speeds.concat('00', _SpeedHex);
+                console.log(_Speed);
+            } else if (tmpLength < 4 && tmpLength >= 3) {
+                _Speed = _Speeds.concat('0', _SpeedHex);
+                console.log(_Speed);
+            }
+            else {
+                console.log(_Speed);
+            }
+            
+            const generateString = `${_slaveID}${_function}00${_startAddr}00070E00${_STP1}00${_STP2}00${_STP3}00${_STP4}00${_STP5}00${_STP6}${_Speed}`;
+
+            const crcValue = calculateModbusCRC(generateString);
+            const decimalValues = convertHexToDec(generateString); // Convert input data from Hex to Dec
+
+            // Display results
+            const resultText = `${decimalValues.join(', ')}, ${crcValue}`;
+            document.getElementById("result").textContent = resultText;
+            const resultRawRext = `原始輸入數據: ${generateString}`;
+            document.getElementById("resultRaw").textContent = resultRawRext;
         }
 
         function calculateCRC2() {
