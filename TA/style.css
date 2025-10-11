@@ -1,0 +1,26 @@
+/* CSS 樣式區 */
+body { font-family: 'Noto Sans TC', sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #f4f7f6; color: #333; }
+header { background-color: #ffc107; color: #333; padding: 1rem 0; text-align: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+header h1 { margin: 0; font-size: 2rem; }
+nav a { color: #333; margin: 0 15px; text-decoration: none; font-weight: bold; font-size: 1rem; }
+nav a:hover { color: #e65100; }
+main { padding: 20px; }
+.hero { 
+    background-color: #4a4a4a; /* 移除圖片連結後的純色背景 */
+    color: white; 
+    text-align: center; 
+    padding: 100px 20px; 
+    border-radius: 15px; 
+    margin-bottom: 40px; 
+}
+.hero-text { background-color: rgba(0, 0, 0, 0.6); display: inline-block; padding: 30px; border-radius: 10px; }
+.cta-button { background-color: #e65100; color: white; padding: 15px 30px; text-decoration: none; font-size: 1.2rem; font-weight: bold; border-radius: 50px; transition: background-color 0.3s; display: inline-block; margin-top: 20px; }
+.cta-button:hover { background-color: #f57c00; }
+.module { background-color: #fff; margin-bottom: 40px; padding: 30px; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
+.module h2 { text-align: center; font-size: 2.2rem; color: #00796b; margin-bottom: 30px; }
+.module .intro-text { text-align: center; max-width: 700px; margin: -20px auto 30px; font-size: 1.1rem; color: #555; }
+.card-container, .superhero-container, .kol-container { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px; }
+.card, .superhero-card, .kol-card { background: #f9f9f9; border-left: 5px solid #ffc107; padding: 20px; border-radius: 8px; width: 30%; min-width: 250px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+.superhero-card, .kol-card { text-align: center; border-left: none; border-top: 5px solid; display: flex; flex-direction: column; }
+.kol-card ul { text-align: left; padding-left: 20px; flex-grow: 1; }
+.kol-card .learning

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自媒體實驗室</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS 樣式區 */
+        body { font-family: 'Noto Sans TC', sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #f4f7f6; color: #333; }
+        header { background-color: #ffc107; color: #333; padding: 1rem 0; text-align: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        header h1 { margin: 0; font-size: 2rem; }
+        nav a { color: #333; margin: 0 15px; text-decoration: none; font-weight: bold; font-size: 1rem; }
+        nav a:hover { color: #e65100; }
+        main { padding: 20px; }
+        .hero { 
+            background-color: #4a4a4a; /* 移除圖片連結後的純色背景 */
+            color: white; 
+            text-align: center; 
+            padding: 100px 20px; 
+            border-radius: 15px; 
+            margin-bottom: 40px; 
+        }
+        .hero-text { background-color: rgba(0, 0, 0, 0.6); display: inline-block; padding: 30px; border-radius: 10px; }
+        .cta-button { background-color: #e65100; color: white; padding: 15px 30px; text-decoration: none; font-size: 1.2rem; font-weight: bold; border-radius: 50px; transition: background-color 0.3s; display: inline-block; margin-top: 20px; }
+        .cta-button:hover { background-color: #f57c00; }
+        .module { background-color: #fff; margin-bottom: 40px; padding: 30px; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
+        .module h2 { text-align: center; font-size: 2.2rem; color: #00796b; margin-bottom: 30px; }
+        .module .intro-text { text-align: center; max-width: 700px; margin: -20px auto 30px; font-size: 1.1rem; color: #555; }
+        .card-container, .superhero-container, .kol-container { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px; }
+        .card, .superhero-card, .kol-card { background: #f9f9f9; border-left: 5px solid #ffc107; padding: 20px; border-radius: 8px; width: 30%; min-width: 250px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .superhero-card, .kol-card { text-align: center; border-left: none; border-top: 5px solid; display: flex; flex-direction: column; }
+        .kol-card ul { text-align: left; padding-left: 20px; flex-grow: 1; }
+        .kol-card .learning-tip { background-color: #e0f2f1; padding: 10px; border-radius: 5px; margin-top: auto; font-weight: bold; color: #004d40; }
+        .kol-card h3 { font-size: 1.5rem; margin-top: 10px; margin-bottom: 10px; }
+        .superhero-icon { font-size: 2rem; font-weight: bold; width: 60px; height: 60px; line-height: 60px; border-radius: 50%; margin: 0 auto 15px; color: white; }
+        .superhero-card.fb { border-color: #1877F2; } .superhero-card.fb .superhero-icon { background-color: #1877F2; }
+        .superhero-card.ig { border-color: #C13584; } .superhero-card.ig .superhero-icon { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); }
+        .superhero-card.threads { border-color: #000000; } .superhero-card.threads .superhero-icon { background-color: #000000; }
+        .superhero-card.yt { border-color: #FF0000; } .superhero-card.yt .superhero-icon { background-color: #FF0000; }
+        .kol-card.howhow { border-color: #42a5f5; } .kol-card.joeman { border-color: #7e57c2; }
+        .kol-card.chien { border-color: #f06292; } .kol-card.han { border-color: #ffb74d; }
+        .tutorial-container { max-width: 800px; margin: 0 auto; }
+        .phase-title { font-size: 2rem; font-weight: bold; text-align: center; color: #e65100; margin-bottom: 20px; padding: 10px; background-color: #fff3e0; border-radius: 10px; border-left: 8px solid #e65100; }
+        .step { background: #f0f4f8; padding: 20px; border-radius: 10px; margin-bottom: 25px; border: 1px solid #ddd; text-align: center; }
+        .step h4 { font-size: 1.5rem; color: #00796b; margin-top: 0; }
+        .step p, .step ul { text-align: left; }
+        .step .centered-text { text-align: center; }
+        .step .code-box { background-color: #e3f2fd; padding: 15px; border-radius: 5px; text-align: left; font-family: 'Courier New', Courier, monospace; }
+        .shot-types-container { display: flex; justify-content: space-around; text-align: center; gap: 15px; flex-wrap: wrap; margin-top: 15px; }
+        .shot-type { width: 30%; min-width: 150px; } .shot-type .icon { font-size: 3rem; } .shot-type h5 { margin: 5px 0; font-size: 1.1rem; }
+        .mistake-list li { background-color: #ffebee; padding: 10px; border-radius: 5px; margin-bottom: 8px; }
+        .story-generator label { display: block; margin-top: 10px; font-weight: bold; text-align: left;}
+        .story-generator input { width: 95%; padding: 8px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; }
+        footer { text-align: center; padding: 20px; background-color: #333; color: #fff; margin-top: 40px; }
+        .wheel-container { position: relative; width: 350px; height: 350px; display: flex; justify-content: center; align-items: center; margin: 20px auto; }
+        .wheel { width: 100%; height: 100%; background-color: #fff; border-radius: 50%; border: 8px solid #ddd; position: relative; overflow: hidden; transition: transform 5s ease-out; }
+        .slice { position: absolute; width: 50%; height: 50%; left: 50%; top: 0; transform-origin: 0% 100%; display: flex; justify-content: center; align-items: center; font-weight: bold; color: #333; padding-left: 20px; box-sizing: border-box; user-select: none; }
+        .slice:nth-child(1) { transform: rotate(0deg) skewY(-60deg); background-color: #ffc107; } .slice:nth-child(2) { transform: rotate(30deg) skewY(-60deg); background-color: #ffd54f; } .slice:nth-child(3) { transform: rotate(60deg) skewY(-60deg); background-color: #ffecb3; } .slice:nth-child(4) { transform: rotate(90deg) skewY(-60deg); background-color: #81d4fa; } .slice:nth-child(5) { transform: rotate(120deg) skewY(-60deg); background-color: #4fc3f7; } .slice:nth-child(6) { transform: rotate(150deg) skewY(-60deg); background-color: #29b6f6; } .slice:nth-child(7) { transform: rotate(180deg) skewY(-60deg); background-color: #a5d6a7; } .slice:nth-child(8) { transform: rotate(210deg) skewY(-60deg); background-color: #81c784; } .slice:nth-child(9) { transform: rotate(240deg) skewY(-60deg); background-color: #66bb6a; } .slice:nth-child(10) { transform: rotate(270deg) skewY(-60deg); background-color: #ef9a9a; } .slice:nth-child(11) { transform: rotate(300deg) skewY(-60deg); background-color: #e57373; } .slice:nth-child(12) { transform: rotate(330deg) skewY(-60deg); background-color: #ef5350; }
+        .slice .text { transform: skewY(60deg) rotate(15deg); width: 80px; white-space: normal; text-align: center; font-size: 12px; }
+        .wheel-container::after { content: ''; position: absolute; width: 25px; height: 25px; background: #fff; border: 4px solid #ddd; border-radius: 50%; z-index: 2; }
+        .pointer { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 30px solid #e65100; z-index: 10; }
+        #spinBtn { margin-top: 15px; padding: 10px 30px; font-size: 1.2rem; font-weight: bold; color: white; background-color: #00796b; border: none; border-radius: 50px; cursor: pointer; transition: background-color 0.3s, transform 0.1s; }
+        #spinBtn:hover { background-color: #004d40; } #spinBtn:active { transform: scale(0.95); } #spinBtn:disabled { background-color: #aaa; cursor: not-allowed; }
+        #product-result { margin-top: 20px; font-size: 1.5rem; font-weight: bold; color: #e65100; min-height: 40px; text-align: center; padding: 5px 15px; background-color: #fff; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: inline-block; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🔬 自媒體實驗室</h1>
+        <nav>
+            <a href="#section1">解密自媒體</a>
+            <a href="#section2">社群分析</a>
+            <a href="#section3">KOL解密</a>
+            <a href="#section4">影片製作全攻略</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-text">
+                <h2>拿起手機，人人都是創作者！</h2>
+                <p>每個想法都有故事，你就是它的導演。準備好開始你的創作之路了嗎？</p>
+                <a href="#section1" class="cta-button">開始我的創作之路！</a>
+            </div>
+        </section>
+
+        <section id="section1" class="module">
+            <h2>第一站：解密自媒體！</h2>
+            <div class="card-container">
+                <div class="card">
+                    <h3>🤔 為什麼要做影片？</h3>
+                    <ul>
+                        <li>現在的人比較不喜歡閱讀大量文字，用聆聽的更方便。</li>
+                        <li>畫面和聲音的變化更能抓住觀眾的心情。</li>
+                        <li>有64%的消費者認為影片更容易打動他們進行消費。</li>
+                        <li>看過產品影片後，有64%~85%的臉書用戶會提高購買慾望。</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>🦸 優點 vs. 👿 大魔王</h3>
+                    <p><strong>超能力：</strong>分享興趣、記錄生活、發揮創意。<br><strong>要小心的大魔王：</strong>網路霸凌、不實訊息、個資外洩。</p>
+                </div>
+                <div class="card">
+                    <h3>👣 什麼是數位足跡？</h3>
+                    <p>你在網路上按的每個讚、留的每句話，都像沙灘上的腳印，很難完全清除。所以記住：傳播得出去的叫「作品」，傳播出不去的叫「作業」。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="section2" class="module">
+            <h2>第二站：網路社群分析</h2>
+            <p class="intro-text">不同的社群平台有不同的特性，了解他們，才能讓你的影片被更多人看到！</p>
+            <div class="superhero-container">
+                <div class="superhero-card fb">
+                    <div class="superhero-icon">FB</div>
+                    <h3>Facebook (臉書)</h3>
+                    <p>功能最全面，像個佈告欄，適合分享生活大小事。爸爸媽媽、老師們比較常用。</p>
+                    <p><strong>商品應用：</strong>為「超商福袋」寫一篇開箱文，分享內容物並標註家人。</p>
+                </div>
+                <div class="superhero-card ig">
+                    <div class="superhero-icon">IG</div>
+                    <h3>Instagram (IG)</h3>
+                    <p>注重視覺呈現，是個線上相簿，追求精美圖片與Reels短影音。年輕人、哥哥姊姊們最愛用。</p>
+                    <p><strong>商品應用：</strong>為「草莓季甜點」拍出夢幻美食照。</p>
+                </div>
+                <div class="superhero-card threads">
+                    <div class="superhero-icon">Th</div>
+                    <h3>Threads (脆脆)</h3>
+                    <p>以簡短文字為主，像個即時對話板，適合快速跟上時事、分享心情。</p>
+                    <p><strong>商品應用：</strong>吃到一款超辣泡麵，立刻發脆：「這款辣雞麵，辣到我靈魂顫抖！🔥」</p>
+                </div>
+                <div class="superhero-card yt">
+                    <div class="superhero-icon">YT</div>
+                    <h3>YouTube</h3>
+                    <p>是影音大平台，像個線上電視台，擅長呈現完整有趣的故事。適合開箱、教學、實驗影片。</p>
+                    <p><strong>商品應用：</strong>拍支5分鐘影片：「用100元挑戰超商最好吃的午餐組合」。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="section3" class="module">
+            <h2>第三站：KOL 業配大解密！</h2>
+            <p class="intro-text">KOL (Key Opinion Leader) 就是「關鍵意見領袖」，他們是網路上的大明星！因為很多人信任他們，所以廠商喜歡找他們合作，把商品放到影片裡，這就叫「業配」。來看看這些高手都怎麼做吧！</p>
+            <div class="kol-container">
+                <div class="kol-card howhow"><h3>HowHow</h3><p><strong>風格：</strong>創意劇情、尷尬幽默</p><ul><li>擅長無厘頭、超展開的短劇。</li><li>本人有招牌的「尷尬臉」。</li><li>影片結尾常有神奇的轉折。</li></ul><p><strong>業配分析：</strong>他會讓「商品」本身變成短劇裡最奇怪、最關鍵的主角，讓你看了哈哈大笑，不知不覺就記住了商品。</p><div class="learning-tip">💡 你的商品可以用什麼「意想不到」的方式出場？</div></div>
+                <div class="kol-card joeman"><h3>Joeman</h3><p><strong>風格：</strong>專業開箱、奢華對決</p><ul><li>最有名的就是「Joe是要對決」系列。</li><li>說話條理分明，有說服力。</li><li>影片製作精緻，像電視節目。</li></ul><p><strong>業配分析：</strong>透過「平價 vs. 奢華」的比較，清楚地展現出商品的特色和價值在哪裡，讓你覺得很專業、值得信賴。</p><div class="learning-tip">💡 如何「比較」出你的超商商品有多厲害？</div></div>
+                <div class="kol-card chien"><h3>千千</h3><p><strong>風格：</strong>親民吃貨、美食挑戰</p><ul><li>食量很大，看她吃東西很療癒。</li><li>表情生動，反應非常真實。</li><li>像鄰家大姐姐一樣有親和力。</li></ul><p><strong>業配分析：</strong>她用最真實的品嚐、最享受的表情來告訴你這個東西有多好吃，讓你隔著螢幕都好像聞到香味了！</p><div class="learning-tip">💡 怎麼拍出你的商品「最好吃」的瞬間？</div></div>
+                <div class="kol-card han"><h3>阿翰</h3><p><strong>風格：</strong>角色扮演、模仿喜劇</p><ul><li>超會模仿，創造出許多經典角色。</li><li>台詞和口音都非常生活化、好笑。</li><li>影片通常在講一個角色的搞笑故事。</li></ul><p><strong>業配分析：</strong>他不是自己介紹商品，而是讓他創造的「角色」去算命、去聊天、去發生一件倒楣事，然後在故事中自然地使用商品。</p><div class="learning-tip">💡 你能幫你的商品創造一個「代言人」嗎？</div></div>
+            </div>
+        </section>
+
+        <section id="section4" class="module">
+            <h2>第四站：變身專業小導演！</h2>
+            <p class="intro-text">影片製作就像做料理一樣。廚師(你)需要有食譜(劇本)、廚具(器材)、食材(演員)和廚藝(技術)，才能做出美味的料理(影片)。我們把它分成三大步驟：</p>
+            <div class="tutorial-container">
+                
+                <h3 class="phase-title">Phase 1: 前製 (Pre-production) - 導演的作戰計畫</h3>
+                <div class="step">
+                    <h4>Step 1: 尋找靈感與目標</h4>
+                    <p class="centered-text">缺乏目的，是通往爛片之路！在開拍前，先問問自己：</p>
+                    <ul>
+                        <li><b>What (主題):</b> 影片要拍什麼？</li>
+                        <li><b>Why (目的):</b> 希望影片達到什麼效果？ 是要引發互動、傳達知識 還是促銷商品？</li>
+                        <li><b>Who (觀眾):</b> 這支影片要給誰看？ 觀眾想要看什麼？</li>
+                    </ul>
+                    <p class="centered-text">不知道要拍什麼？先用靈感轉盤決定今天的主角吧！</p>
+                    <div class="wheel-container"><div class="pointer"></div><div class="wheel" id="wheel"></div></div>
+                    <button id="spinBtn">點我轉動！</button>
+                    <h3 id="product-result">今天的主角是？</h3>
+                </div>
+
+                <div class="step">
+                    <h4>Step 2: 寫劇本 (Script)</h4>
+                    <p>劇本就是影片的書面版本，包含台詞和畫面的簡短描述。它是跟所有工作人員溝通的工具。</p>
+                    <p>你可以用一些簡單的符號來寫劇本：</p>
+                    <div class="code-box">
+                    △ 代表動作、表情、場景<br>
+                    ： 代表台詞、旁白<br>
+                    ( ) 代表心裡的聲音或補充說明
+                    </div>
+                    <p><b>劇本範例：</b></p>
+                    <div class="code-box">
+                    △在圖書館，一通電話打來，圖書館員接起電話。<br>
+                    小女孩：喂~我要兩個可樂，兩個薯條，兩個漢堡<br>
+                    圖書館員：不好意思，我們這裡是圖書館<br>
+                    小女孩：(小聲)喂~我要兩個可樂…聽得見嗎?
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h4>Step 3: 畫分鏡 (Storyboard)</h4>
+                    <p>腳本就是用文字描寫出預想的畫面。而分鏡腳本，就是把文字腳本的視覺部分畫成一張張的圖，讓大家一看就知道要拍什麼畫面。</p>
+                    <p class="centered-text">導演最常用的鏡頭「取景三兄弟」，你一定要認識！</p>
+                    <div class="shot-types-container">
+                        <div class="shot-type"><div class="icon">🏞️</div><h5>遠景 (Long Shot)</h5><p>用來呈現地點、角色和動作，建立場景氣氛。</p></div>
+                        <div class="shot-type"><div class="icon">🧍</div><h5>中景 (Medium Shot)</h5><p>從角色的腰部或膝蓋以上拍攝，適合拍攝對話，能看到表情和肢體動作。</p></div>
+                        <div class="shot-type"><div class="icon">🧑</div><h5>特寫 (Close Up)</h5><p>從肩膀以上到頭頂的範圍，用來強調重要的表情或細節。</p></div>
+                    </div>
+                </div>
+
+                <h3 class="phase-title">Phase 2: 製作 (Production) - 開麥拉！Action!</h3>
+                <div class="step">
+                    <h4>Step 4: 準備攝影與收音</h4>
+                    <p>現在的時代，人人都是攝影師！用手機就可以拍出很棒的影片。</p>
+                    <ul>
+                        <li><b>穩定最重要：</b>畫面晃動是新手最常見的錯誤。盡量使用腳架 或穩定器，如果沒有，就把手肘靠在桌上。</li>
+                        <li><b>聲音超關鍵：</b>聲音和畫面一樣重要！盡量使用外接式麥克風來提升收音品質，並記得監聽錄到的聲音。</li>
+                    </ul>
+                </div>
+                <div class="step">
+                    <h4>Step 5: 學習構圖與運鏡</h4>
+                    <p><b>井字構圖法：</b>也叫三分構圖法，是最好用的構圖技巧！想像畫面中有個「井」字，把主角放在線條的交點上，畫面就會變得很協調、有張力。</p>
+                    <ul>
+                        <li>拍人物時，眼睛盡量不要低於下方三分之一線。</li>
+                        <li>人物視線或動作的方向要多留一點空間。</li>
+                        <li>不要切到人物的關節。</li>
+                    </ul>
+                    <p><b>基本運鏡：</b>先用一個遠景介紹環境(LS)，再用中景導入主題(MS)，最後用特寫強調重點(CU)。</p>
+                </div>
+                <div class="step">
+                    <h4>Step 6: 新手常見拍攝錯誤</h4>
+                    <p class="centered-text">避開這些問題，你的影片就贏過一半的人了！</p>
+                    <ul class="mistake-list">
+                        <li><b>手機拿直的：</b>請用橫的拍攝！ 除非你要拍抖音或Reels。</li>
+                        <li><b>鏡頭髒兮兮：</b>開拍前一定要擦鏡頭！</li>
+                        <li><b>亂動又亂晃：</b>鏡頭不要快速左右搖晃，也別一直 Zoom in / Zoom out。想拍近一點？用你的腳走過去！</li>
+                        <li><b>聲音沒錄好：</b>現場雜音太多、聲音大小聲。注意冷氣、施工等雜音。</li>
+                        <li><b>沒預留空間：</b>影片開頭和結尾，請多錄3到5秒不要動，方便剪輯。</li>
+                    </ul>
+                </div>
+
+
+                <h3 class="phase-title">Phase 3: 後製 (Post-production) - 神剪輯的魔法</h3>
+                <div class="step">
+                    <h4>Step 7: 剪輯、配樂與輸出</h4>
+                    <p>拍攝完成後，就剩下最後的魔法了！你可以使用 CapCut/剪映 等手機APP來完成。</p>
+                    <ul>
+                        <li><b>剪輯：</b>把拍好的片段組裝起來。每個鏡頭建議不要超過10秒，除非是特殊情緒場景。</li>
+                        <li><b>配音配樂：</b>為影片加上適合的音樂、音效。</li>
+                        <li><b>旁白字幕：</b>一定要打上字幕！因為很多人看影片是不開聲音的。</li>
+                        <li><b>行動呼籲：</b>在影片最後，記得告訴觀眾你希望他們做什麼，例如「喜歡請按讚分享！」。</li>
+                    </ul>
+                </div>
+                 <div class="step">
+                    <h4>Step 8: 發表與分享</h4>
+                    <p class="centered-text">恭喜你！完成作品了！最後別忘了幫它好好打扮一下再送出門。</p>
+                    <ul>
+                        <li><b>好的標題與縮圖：</b>想一個吸引人的標題和一張有亮點的封面圖。</li>
+                        <li><b>使用Hashtag：</b>在說明文字中加上「#字」標籤，可以讓更多人找到你的影片。</li>
+                        <li><b>跨平台宣傳：</b>把你的YouTube影片連結分享到FB或IG上，打通傳播管道！</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 自媒體實驗室教學網站. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        const products = ["國民飲料 - 麥香奶茶", "深夜良伴 - 關東煮", "考試必備 - 能量飲", "經典飯糰 - 鮪魚御飯糰", "夏天救星 - 霜淇淋", "台灣之光 - 珍珠奶茶", "新口味 - 洋芋片", "超罪惡 - 熱狗大亨堡", "健康選擇 - 一日野菜沙拉", "暖心甜點 - 焦糖布丁", "提神幫手 - 冰美式", "童年回憶 - 科學麵"];
+        const wheel = document.getElementById('wheel');
+        const spinBtn = document.getElementById('spinBtn');
+        const resultDiv = document.getElementById('product-result');
+        const sliceCount = products.length;
+        const sliceAngle = 360 / sliceCount;
+        let currentRotation = 0;
+        products.forEach((product, i) => { const slice = document.createElement('div'); slice.className = 'slice'; const text = document.createElement('div'); text.className = 'text'; text.textContent = product; slice.appendChild(text); wheel.appendChild(slice); });
+        spinBtn.addEventListener('click', () => {
+            spinBtn.disabled = true; resultDiv.textContent = '轉動中...';
+            const randomIndex = Math.floor(Math.random() * sliceCount); const targetProduct = products[randomIndex];
+            const targetRotation = (360 * 5) - (randomIndex * sliceAngle) - (sliceAngle / 2); currentRotation += targetRotation;
+            wheel.style.transform = `rotate(${currentRotation}deg)`;
+            setTimeout(() => {
+                resultDiv.textContent = `就是它了：${targetProduct}`; spinBtn.disabled = false;
+                const finalAngle = currentRotation % 360;
+                wheel.style.transition = 'none'; wheel.style.transform = `rotate(${finalAngle}deg)`;
+                wheel.offsetHeight; wheel.style.transition = 'transform 5s ease-out';
+                currentRotation = finalAngle;
+            }, 5000);
+        });
+    </script>
+</body>
+</html>
