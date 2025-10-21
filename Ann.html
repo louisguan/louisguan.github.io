@@ -17,7 +17,7 @@
     <div class="max-w-7xl mx-auto">
         <header class="text-center mb-8">
             <h1 class="text-3xl font-bold text-gray-800">Intuitive Anvil Channel</h1>
-            <p class="text-xl text-gray-600 mt-1">新產品開發進度甘特圖</p>
+            <p class="text-xl text-gray-600 mt-1">新產品開發進度甘特圖 / New Product Development Schedule</p>
         </header>
 
         <div id="gantt-container" class="space-y-12">
@@ -26,67 +26,67 @@
     </div>
 
     <script>
-        // 從 Excel 檔案中解析出的專案數據
+        // 從 Excel 檔案中解析出的專案數據，已加入英文翻譯
         const projects = [
             {
                 id: "342405-12 (總)",
                 rev: "B",
                 tasks: [
-                    { name: "雷射焊接", responsible: "綜加課", endDate: "2026-01-30" },
-                    { name: "鈍化", responsible: "磨鉗課", endDate: "2026-02-03" },
-                    { name: "鐵氟龍", responsible: "磨鉗課", endDate: "2026-02-05" },
-                    { name: "檢查1", responsible: "成品課", endDate: "2026-02-07" },
-                    { name: "檢查2", responsible: "成品課", endDate: "2026-02-10" },
-                    { name: "包裝與存放", responsible: "成品課", endDate: "2026-02-12" },
+                    { name: "雷射焊接", name_en: "Laser Welding", responsible: "綜加課", responsible_en: "Comprehensive Processing", endDate: "2026-01-30" },
+                    { name: "鈍化", name_en: "Passivation", responsible: "磨鉗課", responsible_en: "Grinding & Polishing", endDate: "2026-02-03" },
+                    { name: "鐵氟龍", name_en: "DryFilm", responsible: "磨鉗課", responsible_en: "Grinding & Polishing", endDate: "2026-02-05" },
+                    { name: "檢查1", name_en: "Final Inspection", responsible: "成品課", responsible_en: "Finished Goods", endDate: "2026-02-07" },
+                    { name: "檢查2", name_en: "Outgoing Inspection", responsible: "成品課", responsible_en: "Finished Goods", endDate: "2026-02-10" },
+                    { name: "包裝與存放", name_en: "Packing & Storage", responsible: "成品課", responsible_en: "Finished Goods", endDate: "2026-02-12" },
                 ]
             },
             {
                 id: "342406-06",
                 rev: "A",
                 tasks: [
-                    { name: "市購件", responsible: "採購課", endDate: "2025-12-05" },
-                    { name: "熱處理", responsible: "供應商", endDate: "2025-12-11" },
-                    { name: "噴砂", responsible: "供應商", endDate: "2025-12-15" },
-                    { name: "鈍化", responsible: "磨鉗課", endDate: "2025-12-17" },
-                    { name: "檢查1", responsible: "成品課", endDate: "2025-12-19" },
-                    { name: "檢查2", responsible: "成品課", endDate: "2025-12-23" },
-                    { name: "包裝與存放", responsible: "成品課", endDate: "2025-12-25" },
+                    { name: "市購件", name_en: "Purchased Parts", responsible: "採購課", responsible_en: "Purchasing", endDate: "2025-12-05" },
+                    { name: "熱處理", name_en: "Heat Treatment", responsible: "供應商", responsible_en: "Supplier", endDate: "2025-12-11" },
+                    { name: "噴砂", name_en: "Sandblasting", responsible: "供應商", responsible_en: "Supplier", endDate: "2025-12-15" },
+                    { name: "鈍化", name_en: "Passivation", responsible: "磨鉗課", responsible_en: "Grinding & Polishing", endDate: "2025-12-17" },
+                    { name: "檢查1", name_en: "Final Inspection", responsible: "成品課", responsible_en: "Finished Goods", endDate: "2025-12-19" },
+                    { name: "檢查2", name_en: "Outgoing Inspection", responsible: "成品課", responsible_en: "Finished Goods", endDate: "2025-12-23" },
+                    { name: "包裝與存放", name_en: "Packing & Storage", responsible: "成品課", responsible_en: "Finished Goods", endDate: "2025-12-25" },
                 ]
             },
             {
                 id: "342407-01",
                 rev: "A",
                 tasks: [
-                    { name: "市購件", responsible: "採購課", endDate: "2025-12-29" },
-                    { name: "熱處理", responsible: "供應商", endDate: "2026-01-05" },
-                    { name: "噴砂", responsible: "供應商", endDate: "2026-01-09" },
-                    { name: "鈍化", responsible: "磨鉗課", endDate: "2026-01-14" },
-                    { name: "檢查1", responsible: "成品課", endDate: "2026-01-20" },
-                    { name: "檢查2", responsible: "成品課", endDate: "2026-01-26" },
+                    { name: "市購件", name_en: "Purchased Parts", responsible: "採購課", responsible_en: "Purchasing", endDate: "2025-12-29" },
+                    { name: "熱處理", name_en: "Heat Treatment", responsible: "供應商", responsible_en: "Supplier", endDate: "2026-01-05" },
+                    { name: "噴砂", name_en: "Sandblasting", responsible: "供應商", responsible_en: "Supplier", endDate: "2026-01-09" },
+                    { name: "鈍化", name_en: "Passivation", responsible: "磨鉗課", responsible_en: "Grinding & Polishing", endDate: "2026-01-14" },
+                    { name: "檢查1", name_en: "Final Inspection", responsible: "成品課", responsible_en: "Finished Goods", endDate: "2026-01-20" },
+                    { name: "檢查2", name_en: "Outgoing Inspection", responsible: "成品課", responsible_en: "Finished Goods", endDate: "2026-01-26" },
                 ]
             },
             {
                 id: "337025-01",
                 rev: "A",
                 tasks: [
-                    { name: "市購件", responsible: "採購課", endDate: "2025-12-01" },
-                    { name: "鈍化", responsible: "磨鉗課", endDate: "2025-12-03" },
-                    { name: "鐵氟龍", responsible: "磨鉗課", endDate: "2025-12-05" },
-                    { name: "檢查1", responsible: "成品課", endDate: "2025-12-09" },
-                    { name: "檢查2", responsible: "成品課", endDate: "2025-12-11" },
-                    { name: "包裝與存放", responsible: "成品課", endDate: "2025-12-15" },
+                    { name: "市購件", name_en: "Purchased Parts", responsible: "採購課", responsible_en: "Purchasing", endDate: "2025-12-01" },
+                    { name: "鈍化", name_en: "Passivation", responsible: "磨鉗課", responsible_en: "Grinding & Polishing", endDate: "2025-12-03" },
+                    { name: "鐵氟龍", name_en: "DryFilm", responsible: "磨鉗課", responsible_en: "Grinding & Polishing", endDate: "2025-12-05" },
+                    { name: "檢查1", name_en: "Final Inspection", responsible: "成品課", responsible_en: "Finished Goods", endDate: "2025-12-09" },
+                    { name: "檢查2", name_en: "Outgoing Inspection", responsible: "成品課", responsible_en: "Finished Goods", endDate: "2025-12-11" },
+                    { name: "包裝與存放", name_en: "Packing & Storage", responsible: "成品課", responsible_en: "Finished Goods", endDate: "2025-12-15" },
                 ]
             },
             {
                 id: "337026-01",
                 rev: "A",
                 tasks: [
-                    { name: "市購件", responsible: "採購課", endDate: "2025-12-02" },
-                    { name: "鈍化", responsible: "磨鉗課", endDate: "2025-12-04" },
-                    { name: "鐵氟龍", responsible: "磨鉗課", endDate: "2025-12-08" },
-                    { name: "檢查1", responsible: "成品課", endDate: "2025-12-10" },
-                    { name: "檢查2", responsible: "成品課", endDate: "2025-12-12" },
-                    { name: "包裝與存放", responsible: "成品課", endDate: "2025-12-16" },
+                    { name: "市購件", name_en: "Purchased Parts", responsible: "採購課", responsible_en: "Purchasing", endDate: "2025-12-02" },
+                    { name: "鈍化", name_en: "Passivation", responsible: "磨鉗課", responsible_en: "Grinding & Polishing", endDate: "2025-12-04" },
+                    { name: "鐵氟龍", name_en: "DryFilm", responsible: "磨鉗課", responsible_en: "Grinding & Polishing", endDate: "2025-12-08" },
+                    { name: "檢查1", name_en: "Final Inspection", responsible: "成品課", responsible_en: "Finished Goods", endDate: "2025-12-10" },
+                    { name: "檢查2", name_en: "Outgoing Inspection", responsible: "成品課", responsible_en: "Finished Goods", endDate: "2025-12-12" },
+                    { name: "包裝與存放", name_en: "Packing & Storage", responsible: "成品課", responsible_en: "Finished Goods", endDate: "2025-12-16" },
                 ]
             }
         ];
@@ -159,7 +159,7 @@
             let tasksHtml = '';
             project.tasks.forEach((task, index) => {
                 const offsetDays = (task.startDate - minDate) / (1000 * 60 * 60 * 24);
-                const durationDays = (task.endDate - task.startDate) / (1000 * 60 * 60 * 24);
+                const durationDays = Math.max(1, (task.endDate - task.startDate) / (1000 * 60 * 60 * 24));
                 
                 const left = (offsetDays / totalDays) * 100;
                 const width = (durationDays / totalDays) * 100;
@@ -167,17 +167,18 @@
 
                 tasksHtml += `
                     <!-- Task Row -->
-                    <div class="flex items-center border-b border-gray-200 h-14">
-                        <div class="w-1/3 sm:w-1/4 lg:w-1/5 pr-4 text-sm font-medium text-gray-700 truncate">
-                            <p>${task.name}</p>
-                            <p class="text-xs text-gray-500">${task.responsible}</p>
+                    <div class="flex items-center border-b border-gray-200 h-16 py-1">
+                        <div class="w-1/3 sm:w-1/4 lg:w-1/5 pr-4 text-sm text-gray-700">
+                            <p class="truncate font-medium">${task.name}</p>
+                            <p class="truncate text-xs text-gray-500">${task.name_en}</p>
+                            <p class="truncate text-xs text-gray-500 mt-1">${task.responsible} / ${task.responsible_en}</p>
                         </div>
                         <div class="w-2/3 sm:w-3/4 lg:w-4/5 h-full relative">
-                            <div class="absolute top-1/2 -translate-y-1/2 h-8 ${color} rounded-md shadow-sm flex items-center justify-between px-2 text-white text-xs whitespace-nowrap" 
+                            <div class="absolute top-1/2 -translate-y-1/2 h-8 ${color} rounded-md shadow-sm flex items-center justify-between px-2 text-white text-xs" 
                                  style="left: ${left}%; width: ${width}%; min-width: 50px;"
-                                 title="${task.name}: ${formatDate(task.startDate)} - ${formatDate(task.endDate)}">
-                                 <span class="font-semibold truncate">${task.name}</span>
-                                 <span class="hidden sm:inline ml-2 opacity-80">${formatDate(task.startDate)} - ${formatDate(task.endDate)}</span>
+                                 title="${task.name} / ${task.name_en}: ${formatDate(task.startDate)} - ${formatDate(task.endDate)}">
+                                 <span class="font-semibold truncate whitespace-nowrap">${task.name} (${task.name_en})</span>
+                                 <span class="hidden sm:inline ml-2 opacity-80 whitespace-nowrap">${formatDate(task.startDate)} - ${formatDate(task.endDate)}</span>
                             </div>
                         </div>
                     </div>
@@ -186,13 +187,13 @@
 
             projectEl.innerHTML = `
                 <div class="mb-4">
-                    <h2 class="text-xl font-bold text-gray-900">專案: ${project.id}</h2>
-                    <p class="text-sm text-gray-500">版本: ${project.rev}</p>
+                    <h2 class="text-xl font-bold text-gray-900">專案 / Project: ${project.id}</h2>
+                    <p class="text-sm text-gray-500">版本 / Rev: ${project.rev}</p>
                 </div>
                 <div class="w-full" style="min-width: 800px;">
                     <!-- Header: Task Names -->
                     <div class="flex items-center border-b-2 border-gray-300 h-10 bg-gray-50 rounded-t-lg">
-                        <div class="w-1/3 sm:w-1/4 lg:w-1/5 pr-4 pl-4 text-sm font-semibold text-gray-600">任務/負責單位</div>
+                        <div class="w-1/3 sm:w-1/4 lg:w-1/5 pr-4 pl-4 text-sm font-semibold text-gray-600">任務/負責單位 (Task / Dept.)</div>
                         <div class="w-2/3 sm:w-3/4 lg:w-4/5 relative">
                             <!-- Timeline Header -->
                             <div class="flex">${monthHeaders}</div>
@@ -210,3 +211,4 @@
     </script>
 </body>
 </html>
+
