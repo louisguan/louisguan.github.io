@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>專案開發進度甘特圖</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 p-4 sm:p-6 lg:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">Intuitive Anvil Channel</h1>
+            <p class="text-xl text-gray-600 mt-1">新產品開發進度甘特圖</p>
+        </header>
+
+        <div id="gantt-container" class="space-y-12">
+            <!-- 甘特圖將會動態插入此處 -->
+        </div>
+    </div>
+
+    <script>
+        // 從 Excel 檔案中解析出的專案數據
+        const projects = [
+            {
+                id: "342405-12 (總)",
+                rev: "B",
+                tasks: [
+                    { name: "雷射焊接", responsible: "綜加課", endDate: "2026-01-30" },
+                    { name: "鈍化", responsible: "磨鉗課", endDate: "2026-02-03" },
+                    { name: "鐵氟龍", responsible: "磨鉗課", endDate: "2026-02-05" },
+                    { name: "檢查1", responsible: "成品課", endDate: "2026-02-07" },
+                    { name: "檢查2", responsible: "成品課", endDate: "2026-02-10" },
+                    { name: "包裝與存放", responsible: "成品課", endDate: "2026-02-12" },
+                ]
+            },
+            {
+                id: "342406-06",
+                rev: "A",
+                tasks: [
+                    { name: "市購件", responsible: "採購課", endDate: "2025-12-05" },
+                    { name: "熱處理", responsible: "供應商", endDate: "2025-12-11" },
+                    { name: "噴砂", responsible: "供應商", endDate: "2025-12-15" },
+                    { name: "鈍化", responsible: "磨鉗課", endDate: "2025-12-17" },
+                    { name: "檢查1", responsible: "成品課", endDate: "2025-12-19" },
+                    { name: "檢查2", responsible: "成品課", endDate: "2025-12-23" },
+                    { name: "包裝與存放", responsible: "成品課", endDate: "2025-12-25" },
+                ]
+            },
+            {
+                id: "342407-01",
+                rev: "A",
+                tasks: [
+                    { name: "市購件", responsible: "採購課", endDate: "2025-12-29" },
+                    { name: "熱處理", responsible: "供應商", endDate: "2026-01-05" },
+                    { name: "噴砂", responsible: "供應商", endDate: "2026-01-09" },
+                    { name: "鈍化", responsible: "磨鉗課", endDate: "2026-01-14" },
+                    { name: "檢查1", responsible: "成品課", endDate: "2026-01-20" },
+                    { name: "檢查2", responsible: "成品課", endDate: "2026-01-26" },
+                ]
+            },
+            {
+                id: "337025-01",
+                rev: "A",
+                tasks: [
+                    { name: "市購件", responsible: "採購課", endDate: "2025-12-01" },
+                    { name: "鈍化", responsible: "磨鉗課", endDate: "2025-12-03" },
+                    { name: "鐵氟龍", responsible: "磨鉗課", endDate: "2025-12-05" },
+                    { name: "檢查1", responsible: "成品課", endDate: "2025-12-09" },
+                    { name: "檢查2", responsible: "成品課", endDate: "2025-12-11" },
+                    { name: "包裝與存放", responsible: "成品課", endDate: "2025-12-15" },
+                ]
+            },
+            {
+                id: "337026-01",
+                rev: "A",
+                tasks: [
+                    { name: "市購件", responsible: "採購課", endDate: "2025-12-02" },
+                    { name: "鈍化", responsible: "磨鉗課", endDate: "2025-12-04" },
+                    { name: "鐵氟龍", responsible: "磨鉗課", endDate: "2025-12-08" },
+                    { name: "檢查1", responsible: "成品課", endDate: "2025-12-10" },
+                    { name: "檢查2", responsible: "成品課", endDate: "2025-12-12" },
+                    { name: "包裝與存放", responsible: "成品課", endDate: "2025-12-16" },
+                ]
+            }
+        ];
+
+        // 處理日期和任務期間
+        const processedProjects = projects.map(p => {
+            const tasksWithDates = p.tasks.map((task, index, arr) => {
+                const endDate = new Date(task.endDate + 'T00:00:00');
+                let startDate;
+                if (index === 0) {
+                    // 假設第一個任務的持續時間為5天
+                    startDate = new Date(endDate);
+                    startDate.setDate(startDate.getDate() - 5);
+                } else {
+                    // 後續任務的開始日期為前一個任務的結束日期
+                    startDate = new Date(arr[index - 1].endDate + 'T00:00:00');
+                }
+                return { ...task, startDate, endDate };
+            });
+            return { ...p, tasks: tasksWithDates };
+        });
+
+        const container = document.getElementById('gantt-container');
+
+        const COLORS = [
+            'bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-red-500',
+            'bg-yellow-500', 'bg-indigo-500', 'bg-pink-500', 'bg-teal-500'
+        ];
+        
+        // 日期格式化輔助函數
+        const formatDate = (date) => {
+            return `${date.getMonth() + 1}/${date.getDate()}`;
+        };
+
+        processedProjects.forEach((project, projectIndex) => {
+            const projectEl = document.createElement('div');
+            projectEl.className = 'bg-white rounded-xl shadow-lg p-4 sm:p-6 overflow-x-auto';
+            
+            const allDates = project.tasks.flatMap(t => [t.startDate, t.endDate]);
+            const minDate = new Date(Math.min(...allDates));
+            minDate.setDate(minDate.getDate() - 2); // 留出一些緩衝空間
+            const maxDate = new Date(Math.max(...allDates));
+            maxDate.setDate(maxDate.getDate() + 2); // 留出一些緩衝空間
+
+            const totalDays = (maxDate - minDate) / (1000 * 60 * 60 * 24);
+
+            // 建立時間軸標頭
+            let monthHeaders = '';
+            let dayHeaders = '';
+            let currentDate = new Date(minDate);
+            let months = {};
+
+            while(currentDate <= maxDate) {
+                const month = currentDate.toLocaleString('default', { month: 'short' });
+                const year = currentDate.getFullYear();
+                const key = `${month} ${year}`;
+                if(!months[key]) {
+                    months[key] = 0;
+                }
+                months[key]++;
+                dayHeaders += `<div class="text-center text-xs text-gray-500 border-r border-gray-200" style="min-width: 25px;">${currentDate.getDate()}</div>`;
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            
+            for (const key in months) {
+                const width = (months[key] / totalDays) * 100;
+                monthHeaders += `<div class="text-center text-sm font-medium text-gray-700 border-b-2 border-gray-300" style="width: ${width}%">${key}</div>`;
+            }
+
+            let tasksHtml = '';
+            project.tasks.forEach((task, index) => {
+                const offsetDays = (task.startDate - minDate) / (1000 * 60 * 60 * 24);
+                const durationDays = (task.endDate - task.startDate) / (1000 * 60 * 60 * 24);
+                
+                const left = (offsetDays / totalDays) * 100;
+                const width = (durationDays / totalDays) * 100;
+                const color = COLORS[index % COLORS.length];
+
+                tasksHtml += `
+                    <!-- Task Row -->
+                    <div class="flex items-center border-b border-gray-200 h-14">
+                        <div class="w-1/3 sm:w-1/4 lg:w-1/5 pr-4 text-sm font-medium text-gray-700 truncate">
+                            <p>${task.name}</p>
+                            <p class="text-xs text-gray-500">${task.responsible}</p>
+                        </div>
+                        <div class="w-2/3 sm:w-3/4 lg:w-4/5 h-full relative">
+                            <div class="absolute top-1/2 -translate-y-1/2 h-8 ${color} rounded-md shadow-sm flex items-center justify-between px-2 text-white text-xs whitespace-nowrap" 
+                                 style="left: ${left}%; width: ${width}%; min-width: 50px;"
+                                 title="${task.name}: ${formatDate(task.startDate)} - ${formatDate(task.endDate)}">
+                                 <span class="font-semibold truncate">${task.name}</span>
+                                 <span class="hidden sm:inline ml-2 opacity-80">${formatDate(task.startDate)} - ${formatDate(task.endDate)}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            projectEl.innerHTML = `
+                <div class="mb-4">
+                    <h2 class="text-xl font-bold text-gray-900">專案: ${project.id}</h2>
+                    <p class="text-sm text-gray-500">版本: ${project.rev}</p>
+                </div>
+                <div class="w-full" style="min-width: 800px;">
+                    <!-- Header: Task Names -->
+                    <div class="flex items-center border-b-2 border-gray-300 h-10 bg-gray-50 rounded-t-lg">
+                        <div class="w-1/3 sm:w-1/4 lg:w-1/5 pr-4 pl-4 text-sm font-semibold text-gray-600">任務/負責單位</div>
+                        <div class="w-2/3 sm:w-3/4 lg:w-4/5 relative">
+                            <!-- Timeline Header -->
+                            <div class="flex">${monthHeaders}</div>
+                            <div class="grid" style="grid-template-columns: repeat(${Math.ceil(totalDays)}, minmax(0, 1fr));">${dayHeaders}</div>
+                        </div>
+                    </div>
+                    <!-- Tasks Container -->
+                    <div>
+                        ${tasksHtml}
+                    </div>
+                </div>
+            `;
+            container.appendChild(projectEl);
+        });
+    </script>
+</body>
+</html>
