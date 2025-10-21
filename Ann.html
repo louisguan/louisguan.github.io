@@ -11,6 +11,18 @@
             font-family: 'Inter', 'Noto Sans TC', sans-serif;
             background-color: #f8fafc;
         }
+        .project-content {
+            max-height: 1200px; /* A large enough value for content */
+            transition: max-height 0.5s ease-in-out, opacity 0.4s ease-in-out;
+            overflow: hidden;
+        }
+        .project-content.collapsed {
+            max-height: 0;
+            opacity: 0;
+        }
+        .chevron-icon {
+            transition: transform 0.3s ease-in-out;
+        }
     </style>
 </head>
 <body class="bg-gray-50 p-4 sm:p-6 lg:p-8">
@@ -20,7 +32,7 @@
             <p class="text-xl text-gray-600 mt-1">新產品開發進度甘特圖 / New Product Development Schedule</p>
         </header>
 
-        <div id="gantt-container" class="space-y-12">
+        <div id="gantt-container" class="space-y-4">
             <!-- 甘特圖將會動態插入此處 -->
         </div>
     </div>
@@ -123,7 +135,7 @@
 
         processedProjects.forEach((project, projectIndex) => {
             const projectEl = document.createElement('div');
-            projectEl.className = 'bg-white rounded-xl shadow-lg p-4 sm:p-6 overflow-x-auto';
+            projectEl.className = 'bg-white rounded-xl shadow-lg';
             
             const allDates = project.tasks.flatMap(t => [t.startDate, t.endDate]);
             const minDate = new Date(Math.min(...allDates));
@@ -133,7 +145,6 @@
 
             const totalDays = (maxDate - minDate) / (1000 * 60 * 60 * 24);
 
-            // 建立時間軸標頭
             let monthHeaders = '';
             let dayHeaders = '';
             let currentDate = new Date(minDate);
@@ -143,9 +154,7 @@
                 const month = currentDate.toLocaleString('default', { month: 'short' });
                 const year = currentDate.getFullYear();
                 const key = `${month} ${year}`;
-                if(!months[key]) {
-                    months[key] = 0;
-                }
+                if(!months[key]) { months[key] = 0; }
                 months[key]++;
                 dayHeaders += `<div class="text-center text-xs text-gray-500 border-r border-gray-200" style="min-width: 25px;">${currentDate.getDate()}</div>`;
                 currentDate.setDate(currentDate.getDate() + 1);
@@ -160,13 +169,11 @@
             project.tasks.forEach((task, index) => {
                 const offsetDays = (task.startDate - minDate) / (1000 * 60 * 60 * 24);
                 const durationDays = Math.max(1, (task.endDate - task.startDate) / (1000 * 60 * 60 * 24));
-                
                 const left = (offsetDays / totalDays) * 100;
                 const width = (durationDays / totalDays) * 100;
                 const color = COLORS[index % COLORS.length];
 
                 tasksHtml += `
-                    <!-- Task Row -->
                     <div class="flex items-center border-b border-gray-200 h-16 py-1">
                         <div class="w-1/3 sm:w-1/4 lg:w-1/5 pr-4 text-sm text-gray-700">
                             <p class="truncate font-medium">${task.name}</p>
@@ -181,33 +188,59 @@
                                  <span class="hidden sm:inline ml-2 opacity-80 whitespace-nowrap">${formatDate(task.startDate)} - ${formatDate(task.endDate)}</span>
                             </div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             });
 
-            projectEl.innerHTML = `
-                <div class="mb-4">
-                    <h2 class="text-xl font-bold text-gray-900">專案 / Project: ${project.id}</h2>
-                    <p class="text-sm text-gray-500">版本 / Rev: ${project.rev}</p>
-                </div>
+            const chartHtml = `
                 <div class="w-full" style="min-width: 800px;">
-                    <!-- Header: Task Names -->
                     <div class="flex items-center border-b-2 border-gray-300 h-10 bg-gray-50 rounded-t-lg">
                         <div class="w-1/3 sm:w-1/4 lg:w-1/5 pr-4 pl-4 text-sm font-semibold text-gray-600">任務/負責單位 (Task / Dept.)</div>
                         <div class="w-2/3 sm:w-3/4 lg:w-4/5 relative">
-                            <!-- Timeline Header -->
                             <div class="flex">${monthHeaders}</div>
                             <div class="grid" style="grid-template-columns: repeat(${Math.ceil(totalDays)}, minmax(0, 1fr));">${dayHeaders}</div>
                         </div>
                     </div>
-                    <!-- Tasks Container -->
+                    <div>${tasksHtml}</div>
+                </div>`;
+
+            projectEl.innerHTML = `
+                <div class="project-header flex justify-between items-center cursor-pointer p-4 sm:p-6">
                     <div>
-                        ${tasksHtml}
+                        <h2 class="text-xl font-bold text-gray-900">專案 / Project: ${project.id}</h2>
+                        <p class="text-sm text-gray-500">版本 / Rev: ${project.rev}</p>
                     </div>
+                    <svg class="chevron-icon w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </div>
-            `;
+                <div class="project-content">
+                    <div class="px-4 sm:px-6 pb-4 sm:pb-6 overflow-x-auto">
+                        ${chartHtml}
+                    </div>
+                </div>`;
+            
             container.appendChild(projectEl);
+
+            if (projectIndex > 0) {
+                const content = projectEl.querySelector('.project-content');
+                const icon = projectEl.querySelector('.chevron-icon');
+                content.classList.add('collapsed');
+                icon.classList.add('rotate-180');
+            }
         });
+
+        // 為專案標題添加點擊事件以進行收合/展開
+        const addToggleFunctionality = () => {
+            const headers = document.querySelectorAll('.project-header');
+            headers.forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    const icon = header.querySelector('.chevron-icon');
+
+                    content.classList.toggle('collapsed');
+                    icon.classList.toggle('rotate-180');
+                });
+            });
+        };
+        addToggleFunctionality();
     </script>
 </body>
 </html>
