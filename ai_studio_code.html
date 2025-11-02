@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>影片下載器 (線上版)</title>
+    <style>
+        /* CSS 樣式保持不變 */
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f4f7f9; color: #333; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; box-sizing: border-box; }
+        .container { width: 100%; max-width: 800px; background: #fff; padding: 20px 40px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #2c3e50; }
+        p { text-align: center; color: #555; margin-bottom: 25px; }
+        form { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+        #urlInput { flex-grow: 1; padding: 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; min-width: 200px; }
+        #submitBtn { padding: 12px 20px; font-size: 16px; color: #fff; background-color: #3498db; border: none; border-radius: 4px; cursor: pointer; transition: background-color 0.3s; }
+        #submitBtn:hover { background-color: #2980b9; }
+        #submitBtn:disabled { background-color: #95a5a6; cursor: not-allowed; }
+        #log { background-color: #f0f0f0; border: 1px solid #ddd; color: #333; padding: 15px; border-radius: 4px; white-space: pre-wrap; word-wrap: break-word; min-height: 80px; max-height: 250px; overflow-y: auto; font-family: "Courier New", Courier, monospace; margin-top: 10px; }
+        #result { text-align: center; margin-top: 20px; font-size: 18px; }
+        .download-link { display: inline-block; margin-top: 10px; padding: 10px 20px; background-color: #27ae60; color: #fff; text-decoration: none; border-radius: 5px; transition: background-color 0.3s; }
+        .download-link:hover { background-color: #229954; }
+        .error { color: #e74c3c; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>影片下載器 (線上版)</h1>
+        <p>將影片網址貼到下方，解析完成後即可下載。</p>
+        
+        <form id="downloadForm">
+            <input type="url" id="urlInput" placeholder="https://www.youtube.com/watch?v=..." required>
+            <button type="submit" id="submitBtn">開始處理</button>
+        </form>
+
+        <div id="statusArea" style="display: none;">
+            <h2>處理狀態</h2>
+            <pre id="log"></pre>
+        </div>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('downloadForm');
+        const urlInput = document.getElementById('urlInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const statusArea = document.getElementById('statusArea');
+        const log = document.getElementById('log');
+        const result = document.getElementById('result');
+        const API_ENDPOINT = "https://co.wuk.sh/api/json";
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const videoUrl = urlInput.value.trim();
+
+            if (!videoUrl) {
+                alert("請輸入有效的網址。");
+                return;
+            }
+
+            // 【關鍵修改】檢查是否為 file:// 協議
+            if (window.location.protocol === 'file:') {
+                statusArea.style.display = 'block';
+                log.textContent = '❌ 錯誤：無法在本地 file:// 環境下執行。\n\n請依照教學，使用 "python -m http.server" 指令在本機建立一個微型伺服器來測試，或將此檔案部署到 GitHub Pages。';
+                result.innerHTML = '<p class="error">由於瀏覽器安全限制，請勿直接打開此檔案。 </p>';
+                return;
+            }
+
+            // --- 更新UI為處理中狀態 ---
+            submitBtn.disabled = true;
+            submitBtn.textContent = '處理中...';
+            statusArea.style.display = 'block';
+            log.textContent = '已送出請求至線上服務，請稍候...\n';
+            result.innerHTML = '';
+
+            try {
+                const response = await fetch(API_ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({ url: videoUrl, vQuality: 'max' })
+                });
+
+                if (!response.ok) throw new Error(`伺服器錯誤: ${response.status}`);
+                
+                const data = await response.json();
+                log.textContent += `API 回應狀態: ${data.status}\n`;
+
+                if (data.status === 'stream') {
+                    log.textContent += "✅ 處理成功！已產生下載連結。";
+                    result.innerHTML = `<a href="${data.url}" class="download-link" target="_blank" rel="noopener noreferrer">點此下載影片</a><p style="font-size:12px; color:#777;">如果點擊無效，請在連結上按右鍵 -> 另存連結</p>`;
+                } else {
+                    throw new Error(data.text || '未知的 API 錯誤');
+                }
+
+            } catch (error) {
+                // 這裡的 error.message 包含了 "Failed to fetch"
+                log.textContent += `❌ 發生錯誤: ${error.message}\n`;
+                result.innerHTML = `<p class="error">處理失敗，請檢查網址或稍後再試。</p>`;
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '開始處理';
+            }
+        });
+    </script>
+</body>
+</html>
