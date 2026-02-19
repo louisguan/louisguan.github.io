@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>地鐵跑酷 | Subway Rush</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #0b1021; /* 深藍色背景 */
+            font-family: "Microsoft JhengHei", "Heiti TC", sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        #game-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        /* UI 通用樣式 */
+        .ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* 讓點擊穿透到 canvas */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        /* 標題畫面 */
+        #start-screen {
+            background: rgba(11, 16, 33, 0.85);
+            pointer-events: auto;
+            backdrop-filter: blur(5px);
+            transition: opacity 0.5s;
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 60px;
+            margin: 0;
+            text-shadow: 0 0 10px #00eaff, 0 0 20px #00eaff;
+            letter-spacing: 5px;
+            font-weight: 800;
+        }
+
+        h2 {
+            color: #00eaff;
+            font-size: 24px;
+            margin-top: 10px;
+            margin-bottom: 50px;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            font-weight: 400;
+        }
+
+        .btn {
+            background: linear-gradient(180deg, #ff7e42 0%, #e65100 100%);
+            color: white;
+            padding: 15px 60px;
+            font-size: 24px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 126, 66, 0.6);
+            transition: transform 0.1s, box-shadow 0.1s;
+            pointer-events: auto;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(255, 126, 66, 0.8);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .controls-hint {
+            margin-top: 40px;
+            color: #aaa;
+            font-size: 14px;
+            text-align: center;
+            line-height: 1.8;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .key-badge {
+            display: inline-block;
+            background: #333;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid #555;
+            font-weight: bold;
+            color: #fff;
+            margin: 0 2px;
+            min-width: 16px;
+            text-align: center;
+        }
+
+        /* 遊戲內 HUD */
+        #game-ui {
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding: 20px;
+            display: none;
+        }
+
+        .score-box {
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        .score-label {
+            font-size: 14px;
+            color: #00eaff;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .coin-box {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            color: #ffcc00;
+            font-size: 32px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        .coin-icon {
+            width: 30px;
+            height: 30px;
+            background: #ffcc00;
+            border-radius: 50%;
+            margin-right: 10px;
+            box-shadow: 0 0 10px #ffcc00;
+            display: inline-block;
+        }
+
+        /* 遊戲結束畫面 */
+        #game-over-screen {
+            background: rgba(0, 0, 0, 0.8);
+            pointer-events: auto;
+            display: none;
+            backdrop-filter: blur(5px);
+        }
+
+        .final-score {
+            font-size: 80px;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .score-title {
+            color: #aaa;
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* 隱藏元素 */
+        .hidden {
+            display: none !important;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        /* Loading */
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #00eaff;
+            font-size: 20px;
+            z-index: 0;
+        }
+    </style>
+    <!-- 引入 Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+    <div id="loading">載入資源中...</div>
+    <div id="game-container"></div>
+
+    <!-- 標題畫面 -->
+    <div id="start-screen" class="ui-layer">
+        <h1>地鐵跑酷</h1>
+        <h2>SUBWAY RUSH</h2>
+        <button class="btn" id="start-btn" onclick="startGame()">開始遊戲</button>
+        
+        <div class="controls-hint">
+            <div><span class="key-badge">←</span> <span class="key-badge">→</span> 或 <span class="key-badge">A</span> <span class="key-badge">D</span> 切換軌道</div>
+            <div><span class="key-badge">↑</span> 或 <span class="key-badge">W</span> 跳躍 · <span class="key-badge">↓</span> 或 <span class="key-badge">S</span> 翻滾</div>
+            <div style="margin-top:5px; color:#888;">手機：左右滑動切換 · 上滑跳躍 · 下滑翻滾</div>
+        </div>
+    </div>
+
+    <!-- 遊戲中 UI -->
+    <div id="game-ui" class="ui-layer">
+        <div>
+            <span class="score-label">SCORE</span>
+            <div id="score-display">0</div>
+        </div>
+        <div class="coin-box">
+            <div class="coin-icon"></div>
+            <span id="coin-display">0</span>
+        </div>
+    </div>
+
+    <!-- 遊戲結束畫面 -->
+    <div id="game-over-screen" class="ui-layer">
+        <div class="score-title">Final Score</div>
+        <div class="final-score" id="final-score">0</div>
+        <button class="btn" onclick="resetGame()">再次挑戰</button>
+    </div>
+
+    <script>
+        // 遊戲狀態變數
+        let scene, camera, renderer;
+        let animationId;
+        let isGameRunning = false;
+        let isGameOver = false;
+        
+        // 遊戲物件
+        let player;
+        let ground;
+        const obstacles = [];
+        const coins = [];
+        const scenery = []; // 裝飾性物體
+        
+        // 參數設定
+        const LANE_WIDTH = 3.5; // 軌道寬度
+        const GRAVITY = 0.015;
+        const JUMP_FORCE = 0.35;
+        const ROLL_TIME = 40; // 滾動持續幀數
+        
+        // 玩家狀態
+        let playerLane = 0; // -1: 左, 0: 中, 1: 右
+        let targetX = 0;
+        let verticalVelocity = 0;
+        let isJumping = false;
+        let isRolling = false;
+        let rollTimer = 0;
+        
+        // 遊戲進度
+        let gameSpeed = 0.4;
+        let score = 0;
+        let coinCount = 0;
+        let distanceTraveled = 0;
+        
+        // 輸入控制
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        // 初始化 Three.js
+        function init() {
+            const container = document.getElementById('game-container');
+            
+            // 場景
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0b1021); // 深藍色
+            scene.fog = new THREE.Fog(0x0b1021, 20, 90); // 霧氣，隱藏遠處生成
+
+            // 攝影機
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 200);
+            camera.position.set(0, 5, 8);
+            camera.lookAt(0, 0, -5);
+
+            // 渲染器
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            container.appendChild(renderer.domElement);
+
+            // 燈光
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+
+            const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            dirLight.position.set(10, 20, 10);
+            dirLight.castShadow = true;
+            dirLight.shadow.camera.top = 20;
+            dirLight.shadow.camera.bottom = -20;
+            dirLight.shadow.camera.left = -20;
+            dirLight.shadow.camera.right = 20;
+            scene.add(dirLight);
+
+            // 聚光燈 (增加氛圍)
+            const spotLight = new THREE.SpotLight(0x00eaff, 0.5);
+            spotLight.position.set(0, 10, 0);
+            spotLight.angle = Math.PI / 4;
+            scene.add(spotLight);
+
+            createWorld();
+            createPlayer();
+            
+            // 預渲染一幀以移除載入文字
+            renderer.render(scene, camera);
+            document.getElementById('loading').style.display = 'none';
+
+            // 監聽視窗大小改變
+            window.addEventListener('resize', onWindowResize, false);
+            
+            // 監聽輸入
+            document.addEventListener('keydown', handleKeyDown);
+            document.addEventListener('touchstart', handleTouchStart, {passive: false});
+            document.addEventListener('touchmove', handleTouchMove, {passive: false});
+            document.addEventListener('touchend', handleTouchEnd, {passive: false});
+        }
+
+        // 建立靜態世界 (地面、軌道)
+        function createWorld() {
+            // 地面
+            const groundGeo = new THREE.PlaneGeometry(100, 200);
+            const groundMat = new THREE.MeshStandardMaterial({ 
+                color: 0x1a1f2e,
+                roughness: 0.8
+            });
+            ground = new THREE.Mesh(groundGeo, groundMat);
+            ground.rotation.x = -Math.PI / 2;
+            ground.position.z = -50;
+            ground.receiveShadow = true;
+            scene.add(ground);
+
+            // 軌道線條 (視覺效果)
+            const lineGeo = new THREE.PlaneGeometry(0.2, 200);
+            const lineMat = new THREE.MeshBasicMaterial({ color: 0x334455 });
+            
+            const positions = [-LANE_WIDTH/2, LANE_WIDTH/2, -LANE_WIDTH*1.5, LANE_WIDTH*1.5];
+            
+            positions.forEach(x => {
+                const line = new THREE.Mesh(lineGeo, lineMat);
+                line.rotation.x = -Math.PI / 2;
+                line.position.set(x, 0.01, -50);
+                scene.add(line);
+            });
+        }
+
+        // 建立玩家角色 (簡易積木人)
+        function createPlayer() {
+            player = new THREE.Group();
+
+            // 身體 (綠色衣服)
+            const bodyGeo = new THREE.BoxGeometry(1, 1.2, 0.6);
+            const bodyMat = new THREE.MeshStandardMaterial({ color: 0x4CAF50 }); // Green
+            const body = new THREE.Mesh(bodyGeo, bodyMat);
+            body.position.y = 1.2;
+            body.castShadow = true;
+            player.add(body);
+
+            // 頭部
+            const headGeo = new THREE.BoxGeometry(0.7, 0.7, 0.7);
+            const headMat = new THREE.MeshStandardMaterial({ color: 0xffccaa }); // Skin
+            const head = new THREE.Mesh(headGeo, headMat);
+            head.position.y = 2.2;
+            head.castShadow = true;
+            player.add(head);
+
+            // 帽子 (鴨舌帽)
+            const hatGeo = new THREE.BoxGeometry(0.75, 0.2, 0.8);
+            const hatMat = new THREE.MeshStandardMaterial({ color: 0xec407a }); // Pinkish
+            const hat = new THREE.Mesh(hatGeo, hatMat);
+            hat.position.y = 2.6;
+            player.add(hat);
+            
+            // 背包
+            const bagGeo = new THREE.BoxGeometry(0.8, 0.8, 0.4);
+            const bagMat = new THREE.MeshStandardMaterial({ color: 0xe65100 }); // Orange bag
+            const bag = new THREE.Mesh(bagGeo, bagMat);
+            bag.position.set(0, 1.4, 0.4);
+            player.add(bag);
+
+            // 腿部 (簡化為一個塊，實際動畫可以用頂點位移)
+            const legGeo = new THREE.BoxGeometry(0.4, 0.6, 0.4);
+            const legMat = new THREE.MeshStandardMaterial({ color: 0x1565C0 }); // Blue pants
+            const leftLeg = new THREE.Mesh(legGeo, legMat);
+            leftLeg.position.set(-0.25, 0.3, 0);
+            const rightLeg = new THREE.Mesh(legGeo, legMat);
+            rightLeg.position.set(0.25, 0.3, 0);
+            player.add(leftLeg);
+            player.add(rightLeg);
+
+            scene.add(player);
+            player.position.y = 0;
+            player.position.z = 0;
+        }
+
+        // 生成障礙物和金幣
+        function spawnObstacle(zPos) {
+            // 隨機選擇 1~2 個車道生成障礙
+            const lanes = [-1, 0, 1];
+            // 洗牌
+            for (let i = lanes.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [lanes[i], lanes[j]] = [lanes[j], lanes[i]];
+            }
+            
+            // 決定佔用幾個車道 (1 或 2，留一條活路)
+            const count = Math.random() > 0.6 ? 2 : 1; 
+
+            for (let i = 0; i < count; i++) {
+                const lane = lanes[i];
+                const type = Math.random();
+                const xPos = lane * LANE_WIDTH;
+
+                if (type < 0.4) {
+                    // 低障礙 (可跳過)
+                    createBarrier(xPos, zPos, false);
+                } else if (type < 0.7) {
+                    // 火車/高牆 (不可跳，需閃避)
+                    createTrain(xPos, zPos);
+                } else {
+                    // 頂部障礙 (需滾動)
+                    createBarrier(xPos, zPos, true);
+                }
+            }
+
+            // 在剩下的車道生成金幣
+            for (let i = count; i < 3; i++) {
+                const lane = lanes[i];
+                if (Math.random() > 0.3) {
+                    createCoins(lane * LANE_WIDTH, zPos);
+                }
+            }
+            
+            // 生成兩側裝飾物
+            if (Math.random() > 0.5) {
+                createScenery(zPos);
+            }
+        }
+
+        function createBarrier(x, z, isHigh) {
+            const height = isHigh ? 1.5 : 1.2;
+            const yPos = isHigh ? 2.5 : 0.6; // High 在空中，Low 在地面
+            
+            const geo = new THREE.BoxGeometry(2.5, height, 0.5);
+            const mat = new THREE.MeshStandardMaterial({ color: isHigh ? 0xd32f2f : 0xff9800 }); // Red for high, Orange for low
+            const mesh = new THREE.Mesh(geo, mat);
+            
+            mesh.position.set(x, yPos, z);
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
+            
+            // 碰撞箱類型
+            mesh.userData = { 
+                type: 'obstacle', 
+                subtype: isHigh ? 'high' : 'low',
+                hitBox: new THREE.Box3() 
+            };
+            
+            scene.add(mesh);
+            obstacles.push(mesh);
+        }
+
+        function createTrain(x, z) {
+            // 模擬火車的長方體
+            const geo = new THREE.BoxGeometry(2.8, 4, 10);
+            const mat = new THREE.MeshStandardMaterial({ color: 0x37474f });
+            const mesh = new THREE.Mesh(geo, mat);
+            
+            mesh.position.set(x, 2, z);
+            mesh.castShadow = true;
+            
+            // 添加車燈細節
+            const lightGeo = new THREE.CylinderGeometry(0.3, 0.3, 0.2, 16);
+            const lightMat = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+            const light1 = new THREE.Mesh(lightGeo, lightMat);
+            light1.rotation.x = Math.PI/2;
+            light1.position.set(-0.8, -1, 5);
+            const light2 = light1.clone();
+            light2.position.set(0.8, -1, 5);
+            mesh.add(light1);
+            mesh.add(light2);
+
+            mesh.userData = { 
+                type: 'obstacle', 
+                subtype: 'train',
+                hitBox: new THREE.Box3() 
+            };
+            
+            scene.add(mesh);
+            obstacles.push(mesh);
+        }
+
+        function createCoins(x, zStart) {
+            // 產生一排 3-5 個金幣
+            const count = 3 + Math.floor(Math.random() * 3);
+            const spacing = 3;
+            
+            const geo = new THREE.CylinderGeometry(0.4, 0.4, 0.1, 16);
+            geo.rotateX(Math.PI / 2); // 讓金幣立起來
+            const mat = new THREE.MeshPhongMaterial({ 
+                color: 0xffd700, 
+                emissive: 0xaa6600,
+                shininess: 100 
+            });
+
+            for (let i = 0; i < count; i++) {
+                const mesh = new THREE.Mesh(geo, mat);
+                mesh.position.set(x, 1, zStart - i * spacing);
+                
+                mesh.userData = { type: 'coin', hitBox: new THREE.Box3() };
+                scene.add(mesh);
+                coins.push(mesh);
+            }
+        }
+        
+        function createScenery(z) {
+            // 背景柱子，模仿隧道或城市建築
+            const height = 10 + Math.random() * 10;
+            const geo = new THREE.CylinderGeometry(1, 1, height, 8);
+            const mat = new THREE.MeshStandardMaterial({ color: 0x0d1626 });
+            
+            const leftMesh = new THREE.Mesh(geo, mat);
+            leftMesh.position.set(-8, height/2, z);
+            scene.add(leftMesh);
+            scenery.push(leftMesh);
+            
+            const rightMesh = new THREE.Mesh(geo, mat);
+            rightMesh.position.set(8, height/2, z);
+            scene.add(rightMesh);
+            scenery.push(rightMesh);
+        }
+
+        // 開始遊戲
+        function startGame() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('game-ui').style.display = 'flex';
+            document.getElementById('game-ui').classList.remove('hidden');
+            
+            resetGameState();
+            isGameRunning = true;
+            
+            // 初始生成一段路
+            for (let z = -20; z > -150; z -= 30) {
+                spawnObstacle(z);
+            }
+            
+            animate();
+        }
+
+        function resetGameState() {
+            isGameOver = false;
+            score = 0;
+            coinCount = 0;
+            gameSpeed = 0.4;
+            distanceTraveled = 0;
+            playerLane = 0;
+            targetX = 0;
+            player.position.set(0, 0, 0);
+            
+            // 清除舊物件
+            obstacles.forEach(o => scene.remove(o));
+            obstacles.length = 0;
+            coins.forEach(c => scene.remove(c));
+            coins.length = 0;
+            scenery.forEach(s => scene.remove(s));
+            scenery.length = 0;
+            
+            updateHUD();
+        }
+
+        function resetGame() {
+            document.getElementById('game-over-screen').classList.add('hidden');
+            document.getElementById('start-screen').classList.remove('hidden');
+        }
+
+        function updateHUD() {
+            document.getElementById('score-display').innerText = Math.floor(score);
+            document.getElementById('coin-display').innerText = coinCount;
+        }
+
+        function gameOver() {
+            isGameRunning = false;
+            isGameOver = true;
+            document.getElementById('final-score').innerText = Math.floor(score);
+            document.getElementById('game-ui').classList.add('hidden');
+            document.getElementById('game-over-screen').classList.remove('hidden');
+            document.getElementById('game-over-screen').style.display = 'flex';
+        }
+
+        // 遊戲主迴圈
+        function animate() {
+            if (!isGameRunning) return;
+            
+            animationId = requestAnimationFrame(animate);
+
+            const delta = gameSpeed;
+            distanceTraveled += delta;
+            score += delta * 0.1; // 分數隨距離增加
+
+            // 1. 移動玩家 X 軸 (左右變換車道)
+            player.position.x += (targetX - player.position.x) * 0.2;
+            
+            // 旋轉身體 (視覺效果)
+            const tilt = (player.position.x - targetX) * 0.1;
+            player.rotation.z = tilt;
+            player.rotation.y = -tilt * 0.5;
+
+            // 2. 處理跳躍與重力
+            if (isJumping) {
+                player.position.y += verticalVelocity;
+                verticalVelocity -= GRAVITY;
+                
+                if (player.position.y <= 0) {
+                    player.position.y = 0;
+                    isJumping = false;
+                    verticalVelocity = 0;
+                }
+            } else if (isRolling) {
+                // 翻滾狀態
+                if (player.scale.y > 0.5) player.scale.y -= 0.1;
+                rollTimer--;
+                if (rollTimer <= 0) {
+                    isRolling = false;
+                }
+            } else {
+                // 回復正常高度
+                if (player.scale.y < 1) player.scale.y += 0.1;
+            }
+
+            // 3. 移動世界物件 (模擬玩家前進)
+            // 將所有障礙物向 Z 正方向移動 (玩家看起來是向 Z 負方向跑)
+            moveObjects(obstacles, delta);
+            moveObjects(coins, delta, true);
+            moveObjects(scenery, delta);
+
+            // 4. 動態生成新路段
+            // 每隔一段距離生成
+            if (Math.floor(distanceTraveled) % 40 === 0 && Math.floor(distanceTraveled) > 0) {
+                 // 稍微防止重複觸發
+                 if (!spawnObstacle.lastSpawn || distanceTraveled - spawnObstacle.lastSpawn > 10) {
+                     spawnObstacle(-120); // 在遠處生成
+                     spawnObstacle.lastSpawn = distanceTraveled;
+                     
+                     // 隨時間增加速度
+                     if (gameSpeed < 1.0) gameSpeed += 0.001;
+                 }
+            }
+
+            // 5. 碰撞檢測
+            checkCollisions();
+
+            updateHUD();
+            renderer.render(scene, camera);
+        }
+        
+        function moveObjects(array, delta, rotate = false) {
+            for (let i = array.length - 1; i >= 0; i--) {
+                const obj = array[i];
+                obj.position.z += delta;
+                
+                if (rotate) {
+                    obj.rotation.y += 0.05;
+                }
+
+                // 移除超出畫面的物件
+                if (obj.position.z > 10) {
+                    scene.remove(obj);
+                    array.splice(i, 1);
+                }
+            }
+        }
+
+        function checkCollisions() {
+            // 更新玩家碰撞箱 (縮小一點寬容度)
+            const pBox = new THREE.Box3().setFromObject(player);
+            // 手動縮小碰撞箱以增加遊戲體驗 (寬恕機制)
+            pBox.min.x += 0.3; pBox.max.x -= 0.3;
+            pBox.min.z += 0.2; pBox.max.z -= 0.2;
+            
+            // 翻滾時 Y 軸判定變低
+            if (isRolling) {
+                pBox.max.y = 1.0; 
+            }
+
+            // 檢查障礙物
+            for (let obs of obstacles) {
+                const oBox = new THREE.Box3().setFromObject(obs);
+                // 微調障礙物邊界
+                oBox.min.x += 0.1; oBox.max.x -= 0.1;
+
+                if (pBox.intersectsBox(oBox)) {
+                    // 撞到了
+                    gameOver();
+                    return;
+                }
+            }
+
+            // 檢查金幣
+            for (let i = coins.length - 1; i >= 0; i--) {
+                const coin = coins[i];
+                const cBox = new THREE.Box3().setFromObject(coin);
+                
+                if (pBox.intersectsBox(cBox)) {
+                    // 吃到金幣
+                    score += 10;
+                    coinCount++;
+                    scene.remove(coin);
+                    coins.splice(i, 1);
+                }
+            }
+        }
+
+        // 控制輸入處理
+        function switchLane(direction) {
+            const newLane = playerLane + direction;
+            if (newLane >= -1 && newLane <= 1) {
+                playerLane = newLane;
+                targetX = playerLane * LANE_WIDTH;
+            }
+        }
+
+        function jump() {
+            if (!isJumping && !isRolling) {
+                isJumping = true;
+                verticalVelocity = JUMP_FORCE;
+            }
+        }
+
+        function roll() {
+            if (!isJumping && !isRolling) {
+                isRolling = true;
+                rollTimer = ROLL_TIME;
+            }
+        }
+
+        // 鍵盤事件
+        function handleKeyDown(event) {
+            if (!isGameRunning) return;
+
+            switch(event.key) {
+                case 'ArrowLeft':
+                case 'a':
+                case 'A':
+                    switchLane(-1);
+                    break;
+                case 'ArrowRight':
+                case 'd':
+                case 'D':
+                    switchLane(1);
+                    break;
+                case 'ArrowUp':
+                case 'w':
+                case 'W':
+                    jump();
+                    break;
+                case 'ArrowDown':
+                case 's':
+                case 'S':
+                    roll();
+                    break;
+            }
+        }
+
+        // 觸控事件 (Swipe)
+        function handleTouchStart(evt) {
+            touchStartX = evt.touches[0].clientX;
+            touchStartY = evt.touches[0].clientY;
+        }
+
+        function handleTouchMove(evt) {
+            evt.preventDefault(); // 防止滾動頁面
+        }
+
+        function handleTouchEnd(evt) {
+            if (!isGameRunning) return;
+
+            const touchEndX = evt.changedTouches[0].clientX;
+            const touchEndY = evt.changedTouches[0].clientY;
+
+            const dx = touchEndX - touchStartX;
+            const dy = touchEndY - touchStartY;
+
+            if (Math.abs(dx) > Math.abs(dy)) {
+                // 水平滑動
+                if (Math.abs(dx) > 30) {
+                    if (dx > 0) switchLane(1);
+                    else switchLane(-1);
+                }
+            } else {
+                // 垂直滑動
+                if (Math.abs(dy) > 30) {
+                    if (dy < 0) jump(); // 上滑 (Y 變小)
+                    else roll(); // 下滑
+                }
+            }
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // 啟動
+        init();
+
+    </script>
+</body>
+</html>
