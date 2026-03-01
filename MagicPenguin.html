@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Magic Sort - 魔法液體排序</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #1a0b3c;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        /* 瓶子樣式 */
+        .bottle {
+            width: 60px;
+            height: 160px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 0 0 20px 20px;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .bottle.selected {
+            transform: translateY(-20px);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            border-color: #fff;
+        }
+
+        /* 瓶口 */
+        .bottle::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 12px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* 液體層 */
+        .liquid-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column-reverse;
+        }
+
+        .liquid-layer {
+            width: 100%;
+            height: 25%;
+            transition: height 0.3s ease-in-out;
+            position: relative;
+        }
+
+        /* 顏色樣式 */
+        .color-blue { background: linear-gradient(to right, #4facfe, #00f2fe); }
+        .color-purple { background: linear-gradient(to right, #6a11cb, #2575fc); }
+        .color-yellow { background: linear-gradient(to right, #f9d423, #ff4e50); }
+        .color-pink { background: linear-gradient(to right, #ff9a9e, #fecfef); }
+        .color-green { background: linear-gradient(to right, #43e97b, #38f9d7); }
+
+        /* 企鵝瓶樣式 (中間大瓶子) */
+        .penguin-bottle {
+            width: 140px;
+            height: 180px;
+            border-radius: 60px 60px 30px 30px;
+            border: 4px solid rgba(255, 255, 255, 0.4);
+            margin: 20px auto;
+            position: relative;
+            background: rgba(20, 20, 50, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .penguin-features {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .eye {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            top: 40px;
+        }
+        .eye-left { left: 45px; }
+        .eye-right { right: 45px; }
+        .eye::after {
+            content: '';
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: black;
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+        }
+
+        .beak {
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 15px solid #ff9800;
+        }
+
+        /* 勝利畫面 */
+        #win-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: #4a90e2;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        /* 網格佈局 */
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            padding: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="flex flex-col h-screen items-center justify-between py-8">
+        <!-- 標題區域 -->
+        <div class="text-center">
+            <h1 class="text-3xl font-bold italic tracking-wider text-blue-300">MAGIC SORT</h1>
+            <p class="text-sm opacity-70">分類魔法液體以通關</p>
+        </div>
+
+        <!-- 中間企鵝與遊戲區域 -->
+        <div class="w-full flex flex-col items-center">
+            
+            <div id="penguin-container" class="relative">
+                <div class="penguin-bottle bottle" id="bottle-penguin" onclick="handleBottleClick('penguin')">
+                    <div class="penguin-features">
+                        <div class="eye eye-left"></div>
+                        <div class="eye eye-right"></div>
+                        <div class="beak"></div>
+                    </div>
+                    <div class="liquid-container" id="liquid-penguin"></div>
+                </div>
+            </div>
+
+            <div class="game-grid" id="game-grid">
+                <!-- 瓶子會由 JavaScript 生成 -->
+            </div>
+        </div>
+
+        <!-- 底部控制 -->
+        <div class="flex gap-4 mb-4">
+            <button class="btn bg-gray-600" onclick="initGame()">重新開始</button>
+            <button class="btn bg-purple-600" onclick="undoMove()">撤銷</button>
+        </div>
+    </div>
+
+    <!-- 勝利彈窗 -->
+    <div id="win-modal">
+        <h2 class="text-4xl font-bold mb-6 text-yellow-400">太棒了！</h2>
+        <p class="mb-8">你成功分類了所有液體</p>
+        <button class="btn bg-green-500 text-xl px-10" onclick="initGame()">下一關</button>
+    </div>
+
+    <script>
+        const COLORS = ['blue', 'purple', 'yellow', 'pink', 'green'];
+        const MAX_LAYERS = 4;
+        let bottles = [];
+        let selectedIdx = null;
+        let history = [];
+
+        // 初始化遊戲
+        function initGame() {
+            document.getElementById('win-modal').style.display = 'none';
+            selectedIdx = null;
+            history = [];
+            
+            // 隨機打亂顏色
+            const allColors = [];
+            COLORS.forEach(color => {
+                for(let i=0; i<MAX_LAYERS; i++) allColors.push(color);
+            });
+            shuffleArray(allColors);
+
+            // 分配顏色到瓶子 (5個彩色瓶，2個空瓶，1個企鵝瓶也作為容器)
+            // 總共 8 個瓶子位置：0(企鵝), 1-7(小瓶子)
+            bottles = [];
+            // 企鵝瓶 (索引 0)
+            bottles.push([]);
+            
+            // 小瓶子 (索引 1-7)
+            for (let i = 0; i < 7; i++) {
+                if (i < 5) {
+                    const layers = [];
+                    for (let j = 0; j < MAX_LAYERS; j++) {
+                        layers.push(allColors.pop());
+                    }
+                    bottles.push(layers);
+                } else {
+                    bottles.push([]); // 空瓶
+                }
+            }
+
+            render();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function render() {
+            // 渲染企鵝瓶
+            const penguinLiquid = document.getElementById('liquid-penguin');
+            renderBottleContent(penguinLiquid, bottles[0]);
+            
+            // 渲染小瓶子
+            const grid = document.getElementById('game-grid');
+            grid.innerHTML = '';
+            for (let i = 1; i < bottles.length; i++) {
+                const bottleDiv = document.createElement('div');
+                bottleDiv.className = `bottle ${selectedIdx === i ? 'selected' : ''}`;
+                bottleDiv.onclick = () => handleBottleClick(i);
+                
+                const liquidCont = document.createElement('div');
+                liquidCont.className = 'liquid-container';
+                renderBottleContent(liquidCont, bottles[i]);
+                
+                bottleDiv.appendChild(liquidCont);
+                grid.appendChild(bottleDiv);
+            }
+
+            // 更新企鵝瓶選擇狀態
+            document.getElementById('bottle-penguin').className = `penguin-bottle bottle ${selectedIdx === 0 ? 'selected' : ''}`;
+        }
+
+        function renderBottleContent(container, layers) {
+            container.innerHTML = '';
+            layers.forEach(color => {
+                const layer = document.createElement('div');
+                layer.className = `liquid-layer color-${color}`;
+                container.appendChild(layer);
+            });
+        }
+
+        function handleBottleClick(idx) {
+            const actualIdx = idx === 'penguin' ? 0 : idx;
+
+            if (selectedIdx === null) {
+                // 選取瓶子：必須非空
+                if (bottles[actualIdx].length > 0) {
+                    selectedIdx = actualIdx;
+                }
+            } else if (selectedIdx === actualIdx) {
+                // 取消選取
+                selectedIdx = null;
+            } else {
+                // 嘗試傾倒
+                if (canPour(selectedIdx, actualIdx)) {
+                    pour(selectedIdx, actualIdx);
+                }
+                selectedIdx = null;
+            }
+            render();
+            checkWin();
+        }
+
+        function canPour(fromIdx, toIdx) {
+            const fromLayers = bottles[fromIdx];
+            const toLayers = bottles[toIdx];
+
+            if (fromLayers.length === 0) return false;
+            if (toLayers.length >= MAX_LAYERS) return false;
+
+            const colorToPour = fromLayers[fromLayers.length - 1];
+            
+            // 規則：目標瓶是空的，或者目標瓶頂部顏色相同
+            return toLayers.length === 0 || toLayers[toLayers.length - 1] === colorToPour;
+        }
+
+        function pour(fromIdx, toIdx) {
+            // 保存歷史紀錄以供撤銷
+            history.push(JSON.parse(JSON.stringify(bottles)));
+
+            const colorToPour = bottles[fromIdx][bottles[fromIdx].length - 1];
+            
+            // 計算有多少相同顏色的連續層可以移動
+            let count = 0;
+            for (let i = bottles[fromIdx].length - 1; i >= 0; i--) {
+                if (bottles[fromIdx][i] === colorToPour && bottles[toIdx].length < MAX_LAYERS) {
+                    count++;
+                } else {
+                    break;
+                }
+            }
+
+            // 執行移動
+            for (let i = 0; i < count; i++) {
+                bottles[toIdx].push(bottles[fromIdx].pop());
+            }
+
+            // 簡單音效反饋
+            playTickSound();
+        }
+
+        function undoMove() {
+            if (history.length > 0) {
+                bottles = history.pop();
+                selectedIdx = null;
+                render();
+            }
+        }
+
+        function checkWin() {
+            const isWon = bottles.every(layers => {
+                if (layers.length === 0) return true;
+                if (layers.length === MAX_LAYERS) {
+                    const firstColor = layers[0];
+                    return layers.every(c => c === firstColor);
+                }
+                return false;
+            });
+
+            if (isWon) {
+                setTimeout(() => {
+                    document.getElementById('win-modal').style.display = 'flex';
+                }, 500);
+            }
+        }
+
+        function playTickSound() {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.frequency.setValueAtTime(440, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.1, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.1);
+        }
+
+        // 啟動遊戲
+        window.onload = initGame;
+    </script>
+</body>
+</html>
